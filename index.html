@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CleanCity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="shared-styles.css" />
+  </head>
+  <body class="bg-gray-100 text-gray-900">
+    <div class="flex min-h-screen">
+      <!-- Sidebar -->
+      <aside class="w-64 bg-white shadow-md">
+        <div class="flex items-center justify-center h-20 border-b">
+          <h1 class="text-xl font-bold text-black">🧹 CleanCity</h1>
+        </div>
+        <nav class="mt-6 px-4">
+          <ul class="space-y-4 text-base font-medium">
+            <li><a href="profile.html" class="sidebar-link">User Profile</a></li>
+            <li><a href="report.html" class="sidebar-link">Report Issue</a></li>
+            <li><a href="dashboard.html" class="sidebar-link">Dashboard</a></li>
+            <li><a href="login.html" class="sidebar-link">Login</a></li>
+            <li><a href="logout.html" class="sidebar-link">Logout</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="flex-1 p-10">
+        <h2 class="text-3xl font-semibold mb-6">Welcome to CleanCity</h2>
+        <p class="text-lg text-gray-700">
+          Please use the navigation on the left to manage your profile, report waste issues,
+          or explore community analytics.
+        </p>
+      </main>
+    </div>
+  </body>
+</html>
