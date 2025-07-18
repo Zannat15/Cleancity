@@ -1,24 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="shared-styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CleanCity - Login</title>
+  <link rel="stylesheet" href="./style.css" />
 </head>
-<body class="bg-gray-100">
-  <div class="flex items-center justify-center min-h-screen">
-    <div class="bg-white p-8 rounded shadow-sm w-full max-w-md">
-      <h2 class="text-xl font-bold mb-6">Login to CleanCity</h2>
-      <form class="space-y-4">
-        <input type="email" placeholder="Email" class="w-full border rounded p-2" />
-        <input type="password" placeholder="Password" class="w-full border rounded p-2" />
-        <button class="bg-black text-white px-4 py-2 rounded w-full">Login</button>
-      </form>
-    </div>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="images/placeholder.jpg" alt="CleanCity Logo" />
+        <h1>CleanCity</h1>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html" class="active">Login</a>
+        <a href="profile.html">Profile</a>
+        <a href="report.html">Report</a>
+        <a href="view-issues.html">Issues</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="logout.html">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <section class="section">
+        <h2>Login</h2>
+        <p>Select your role to continue:</p>
+
+        <div class="login-container">
+          <div class="login-box">
+            <h3>Authority Login</h3>
+            <form>
+              <label for="auth-email">Email</label>
+              <input type="email" id="auth-email" placeholder="authority@cleancity.org" required />
+
+              <label for="auth-password">Password</label>
+              <input type="password" id="auth-password" required />
+
+              <button type="submit">Login as Authority</button>
+            </form>
+          </div>
+
+          <div class="login-box">
+            <h3>Citizen Login</h3>
+            <form>
+              <label for="citizen-name">Name</label>
+              <input type="text" id="citizen-name" placeholder="Your Name" required />
+
+              <label for="citizen-area">Area</label>
+              <select id="citizen-area">
+                <option>Select Area</option>
+                <option>Downtown</option>
+                <option>Uptown</option>
+                <option>Suburbs</option>
+              </select>
+
+              <button type="submit">Login as Citizen</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 </body>
 </html>
+
+
+
+
 
 

@@ -1,0 +1,115 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CleanCity – Dashboard</title>
+  <link rel="stylesheet" href="./style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <div class="logo">
+        <img src="images/logo.png" alt="CleanCity Logo" />
+        <h1>CleanCity</h1>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="profile.html">Profile</a>
+        <a href="report.html">Report</a>
+        <a href="view-issues.html">Issues</a>
+        <a href="dashboard.html" class="active">Dashboard</a>
+        <a href="logout.html">Logout</a>
+      </nav>
+    </div>
+
+    <div class="main-content">
+      <div class="section">
+        <h2>📊 CleanCity Dashboard</h2>
+        <p>Insights based on your community’s reporting activity.</p>
+
+        <!-- Cards Section -->
+        <div class="dashboard-cards">
+          <div class="card">
+            <h3>Total Reports</h3>
+            <p>125</p>
+          </div>
+          <div class="card">
+            <h3>Pending Issues</h3>
+            <p>48</p>
+          </div>
+          <div class="card">
+            <h3>Solved</h3>
+            <p>77</p>
+          </div>
+          <div class="card">
+            <h3>Users</h3>
+            <p>150+</p>
+          </div>
+          <div class="card">
+            <h3>Most Reported Area</h3>
+            <p>Downtown</p>
+          </div>
+          <div class="card">
+            <h3>Feedback Score</h3>
+            <p>⭐ 4.6</p>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="chart-grid">
+          <div class="chart-section">
+            <h3>Monthly Reports</h3>
+            <canvas id="lineChart"></canvas>
+          </div>
+          <div class="chart-section">
+            <h3>Area-wise Comparison</h3>
+            <canvas id="barChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Button -->
+        <div style="margin-top: 30px;">
+          <button onclick="alert('Simulated Export')">📤 Export Dashboard</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    new Chart(document.getElementById('lineChart').getContext('2d'), {
+      type: 'line',
+      data: {
+        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        datasets: [{
+          label: 'Reports',
+          data: [15, 30, 25, 40, 20, 60],
+          borderColor: '#2e2e2e',
+          backgroundColor: 'rgba(46,46,46,0.1)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: { plugins:{legend:{labels:{color:'#444'}}}, scales:{x:{ticks:{color:'#666'}}, y:{ticks:{color:'#666'}}} }
+    });
+
+    new Chart(document.getElementById('barChart').getContext('2d'), {
+      type: 'bar',
+      data: {
+        labels: ['Downtown', 'Uptown', 'Suburbs'],
+        datasets: [{
+          label: 'Issues',
+          data: [50, 30, 20],
+          backgroundColor: ['#555', '#888', '#aaa']
+        }]
+      },
+      options: { plugins:{legend:{labels:{color:'#444'}}}, scales:{x:{ticks:{color:'#666'}}, y:{ticks:{color:'#666'}}} }
+    });
+  </script>
+</body>
+</html>
+
+

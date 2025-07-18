@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CleanCity - Profile</title>
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="images/placeholder.jpg" alt="CleanCity Logo" />
+        <h1>CleanCity</h1>
+      </div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="login.html">Login</a>
+        <a href="profile.html" class="active">Profile</a>
+        <a href="report.html">Report</a>
+        <a href="view-issues.html">Issues</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="logout.html">Logout</a>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <section class="section">
+        <h2>User Profile</h2>
+        <form class="profile-form">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="Your Name" required />
+
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="you@example.com" required />
+
+          <label for="location">Location</label>
+          <select id="location">
+            <option>Select Location</option>
+            <option>Downtown</option>
+            <option>Uptown</option>
+            <option>Suburbs</option>
+          </select>
+
+          <label for="summary">Your Impact Summary</label>
+          <textarea id="summary" placeholder="e.g., You reported 12 issues this month." rows="3"></textarea>
+
+          <button type="submit">Update Profile</button>
+        </form>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
+
+
