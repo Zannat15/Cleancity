@@ -1,54 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CleanCity - Report Waste</title>
-  <link rel="stylesheet" href="./style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CleanCity | Report</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
-<body>
-  <div class="container">
-    <aside class="sidebar">
-      <div class="logo">
-        <img src="images/placeholder.jpg" alt="CleanCity Logo">
-        <h1>CleanCity</h1>
-      </div>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="login.html">Login</a>
-        <a href="profile.html">Profile</a>
-        <a href="report.html" class="active">Report</a>
-        <a href="view-issues.html">Issues</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="logout.html">Logout</a>
-      </nav>
-    </aside>
+<body class="has-bg">
 
-    <main class="main-content">
-      <section class="section">
-        <h2>Report Waste Issue</h2>
-        <form class="report-form">
-          <label for="title">Issue Title</label>
-          <input type="text" id="title" placeholder="e.g., Overflowing garbage bin" required>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <img src="./logo3.jpg" alt="CleanCity Logo" class="logo" />
+    <nav>
+      <ul>
+        <li><a href="index.html"class="active">Home</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="report.html"class="active">Report</a></li>
+        <li><a href="view-issues.html">Issues</a></li>
+        <li><a href="history.html">History</a></li>
+        <li><a href="./edit-report.html">Edit Report</a></li>
+        <li><a href="./public-feed.html">Public Feed</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </aside>
 
-          <label for="description">Description</label>
-          <textarea id="description" placeholder="Describe the issue here..." rows="4" required></textarea>
+  <!-- Main Content -->
+  <main class="content">
+    <header class="topbar">
+      <h1>CleanCity</h1>
+      <span class="page-title">Report Waste</span>
+    </header>
 
-          <label for="location">Location</label>
-          <select id="location">
-            <option>Select Area</option>
-            <option>Downtown</option>
-            <option>Uptown</option>
-            <option>Suburbs</option>
-          </select>
+   <div class="cover-image cover-report">
+  <div class="cover-text">
+    <h2></h2>
 
-          <label for="photo">Upload Photo</label>
-          <input type="file" id="photo" accept="image/*">
+    <!-- Report Form -->
+    <section class="report-form">
+      <h2>Submit a Waste Issue</h2>
+      <form>
+        <label for="description">Description:</label>
+        <textarea id="description" rows="4" placeholder="Describe the waste issue..."></textarea>
 
-          <button type="submit">Submit Report</button>
-        </form>
-      </section>
-    </main>
-  </div>
+        <label for="city">City:</label>
+        <select id="city" name="city">
+          <option value="">Select a city</option>
+          <option value="dhaka">Dhaka</option>
+          <option value="chittagong">Chittagong</option>
+          <option value="khulna">Khulna</option>
+          <option value="rajshahi">Rajshahi</option>
+          <option value="sylhet">Sylhet</option>
+          <option value="barisal">Barisal</option>
+          <option value="rangpur">Rangpur</option>
+          <option value="mymensingh">Mymensingh</option>
+        </select>
+
+        <label for="photo">Upload Photo (simulated):</label>
+        <input type="file" id="photo" accept="image/*" />
+
+        <button type="submit">Submit Report</button>
+      </form>
+    </section>
+  </main>
 </body>
 </html>
+
+
+
+

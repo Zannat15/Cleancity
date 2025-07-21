@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CleanCity | Report History</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <img src="./logo3.jpg" alt="CleanCity Logo" class="logo" />
+    <nav>
+      <ul>
+       <li><a href="index.html"class="active">Home</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="report.html">Report</a></li>
+        <li><a href="view-issues.html">Issues</a></li>
+        <li><a href="history.html"class="active">History</a></li>
+        <li><a href="./edit-report.html">Edit Report</a></li>
+        <li><a href="./public-feed.html">Public Feed</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content">
+    <!-- Header -->
+    <header class="topbar">
+      <h1>CleanCity</h1>
+      <span class="page-title">Report History</span>
+    </header>
+
+    <section class="history-dashboard">
+      <div class="table-header">
+        <h2>Submitted Reports</h2>
+        <div class="filters">
+          <input type="text" placeholder="Search reports..." />
+          <select>
+            <option>Filter by Status</option>
+            <option>Pending</option>
+            <option>Solved</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="report-table-container">
+        <table class="report-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Description</th>
+              <th>City</th>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>01</td>
+              <td>Overflowing garbage near school</td>
+              <td>Dhaka</td>
+              <td>2025-07-18</td>
+              <td><span class="badge pending">Pending</span></td>
+              <td>
+                <button class="edit">Edit</button>
+                <button class="delete">Delete</button>
+              </td>
+            </tr>
+            <tr>
+              <td>02</td>
+              <td>Blocked sewer causing foul smell</td>
+              <td>Rajshahi</td>
+              <td>2025-07-12</td>
+              <td><span class="badge solved">Solved</span></td>
+              <td>
+                <button class="view">View</button>
+              </td>
+            </tr>
+            <tr>
+              <td>03</td>
+              <td>Trash not collected for 5 days</td>
+              <td>Khulna</td>
+              <td>2025-07-05</td>
+              <td><span class="badge pending">Pending</span></td>
+              <td>
+                <button class="edit">Edit</button>
+                <button class="delete">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+

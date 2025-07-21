@@ -1,90 +1,68 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CleanCity – Home</title>
-  <link rel="stylesheet" href="./style.css" />
+  <title>CleanCity | Home</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <div class="logo">
-        <img src="./logo2.jpg" alt="CleanCity Logo" />
-        <h1>CleanCity</h1>
-      </div>
-      <nav>
-        <a href="index.html" class="active">Home</a>
-        <a href="login.html">Login</a>
-        <a href="profile.html">Profile</a>
-        <a href="report.html">Report</a>
-        <a href="view-issues.html">Issues</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="logout.html">Logout</a>
-      </nav>
-    </div>
 
-    <main class="main-content">
-  <!-- Hero Section -->
-  <section class="section home-intro">
-    <div class="intro-text">
-      <h1>Welcome to <span class="highlight">CleanCity</span></h1>
-      <p class="lead">
-        Empowering communities to keep neighborhoods clean and safe through easy waste reporting.
-      </p>
-      <p>
-        Quickly report waste issues with photos and precise locations. Track reports and help build a cleaner city.
-    </div>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <img src="./logo3.jpg" alt="CleanCity Logo" class="logo" />
+    <nav>
+      <ul>
+       <li><a href="index.html"class="active">Home</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="report.html">Report</a></li>
+        <li><a href="view-issues.html">Issues</a></li>
+        <li><a href="history.html">History</a></li>
+        <li><a href="./edit-report.html">Edit Report</a></li>
+        <li><a href="./public-feed.html">Public Feed</a></li>
+         <li><a href="dashboard.html">Dashboard</a></li>
+      </ul>
+    </nav>
+  </aside>
 
-    
-  </section>
+  <!-- Main Content -->
+  <main class="content">
+    <!-- Header -->
+    <header class="topbar">
+      <h1>CleanCity</h1>
+      <span class="page-title">Home</span>
+    </header>
 
+    <!-- Cover Image with Welcome Text -->
+<div class="cover-image cover-index">
+  <div class="cover-text">
+    <h2>Welcome to CleanCity</h2>
+    <p>Empowering communities to report and resolve waste issues across Bangladesh.</p>
+  </div>
+</div>
+
+
+    <!-- Mission (Styled Card) -->
+    <section class="mission-card">
+      <h3>Our Mission</h3>
+      <p>To create cleaner and greener urban spaces through collaborative waste reporting and smart analytics.</p>
+    </section>
+
+    <!-- Feature Cards -->
+    <section class="features">
+      <div class="card">Easy Waste Reporting</div>
+      <div class="card">Real-time Tracking</div>
+      <div class="card">Data-driven Decisions</div>
+      <div class="card">Responsive Design</div>
+      <div class="card">Citizen Engagement</div>
+      <div class="card">Analytics Dashboard</div>
+    </section>
+  </main>
   
-  <section class="section mission-card">
-    <h2>Our Mission</h2>
-    <p>
-      At CleanCity, we aim to create cleaner, greener, and healthier environments by making reporting of public cleanliness issues simple and transparent. We believe in empowering every citizen to take part in civic cleanliness through technology.
-    </p>
-  </section>
 
-  <!-- Features Section -->
-  <section class="section features-grid-section">
-    <h2>Key Features</h2>
-    <div class="features-grid">
-      <div class="feature-card">
-        <h3>📸 Photo Evidence</h3>
-        <p>Attach images to better illustrate reported issues.</p>
-      </div>
-      <div class="feature-card">
-        <h3>📍 Location Tracking</h3>
-        <p>Pinpoint issues accurately with live map support.</p>
-      </div>
-      <div class="feature-card">
-        <h3>📝 Easy Reporting</h3>
-        <p>Submit cleanliness complaints in under 2 minutes.</p>
-      </div>
-      <div class="feature-card">
-        <h3>📊 Dashboard</h3>
-        <p>Track issue resolution trends and activity stats.</p>
-      </div>
-      <div class="feature-card">
-        <h3>📂 Issue History</h3>
-        <p>Keep a full log of your past submitted reports.</p>
-      </div>
-      <div class="feature-card">
-        <h3>💬 Anonymous Option</h3>
-        <p>Report without login or sharing personal data.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Report Button at Bottom -->
-  <section class="section">
-    <a href="report.html" class="btn-primary btn-full">Report an Issue</a>
-  </section>
-</main>
-
-
-
+</body>
+</html>
 
 

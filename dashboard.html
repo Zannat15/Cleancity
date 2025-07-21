@@ -1,115 +1,131 @@
-<!-- dashboard.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CleanCity – Dashboard</title>
-  <link rel="stylesheet" href="./style.css" />
+  <title>CleanCity | Dashboard</title>
+  <link rel="stylesheet" href="style.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="container">
-    <div class="sidebar">
-      <div class="logo">
-        <img src="images/logo.png" alt="CleanCity Logo" />
-        <h1>CleanCity</h1>
+
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <img src="./logo3.jpg" alt="CleanCity Logo" class="logo" />
+    <nav>
+      <ul>
+        <li><a href="index.html"class="active">Home</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="report.html">Report</a></li>
+        <li><a href="view-issues.html">Issues</a></li>
+        <li><a href="history.html">History</a></li>
+        <li><a href="./edit-report.html">Edit Report</a></li>
+        <li><a href="./public-feed.html">Public Feed</a></li>
+        <li><a href="dashboard.html"class="active">Dashboard</a></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content">
+    <!-- Header -->
+    <header class="topbar">
+      <h1>CleanCity</h1>
+      <span class="page-title">Dashboard</span>
+    </header>
+
+    <!-- Stat Cards -->
+    <section class="stats-grid">
+      <div class="card stat-card">Total Reports: <strong>128</strong></div>
+      <div class="card stat-card">Resolved Issues: <strong>92</strong></div>
+      <div class="card stat-card">Pending Reports: <strong>36</strong></div>
+      <div class="card stat-card">Active Users: <strong>534</strong></div>
+      <div class="card stat-card">Authorities Online: <strong>12</strong></div>
+    </section>
+
+    <!-- Charts Section -->
+    <section class="charts-grid">
+      <div class="chart-card">
+        <h3>Reports by City</h3>
+        <canvas id="pieChart"></canvas>
       </div>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="login.html">Login</a>
-        <a href="profile.html">Profile</a>
-        <a href="report.html">Report</a>
-        <a href="view-issues.html">Issues</a>
-        <a href="dashboard.html" class="active">Dashboard</a>
-        <a href="logout.html">Logout</a>
-      </nav>
-    </div>
-
-    <div class="main-content">
-      <div class="section">
-        <h2>📊 CleanCity Dashboard</h2>
-        <p>Insights based on your community’s reporting activity.</p>
-
-        <!-- Cards Section -->
-        <div class="dashboard-cards">
-          <div class="card">
-            <h3>Total Reports</h3>
-            <p>125</p>
-          </div>
-          <div class="card">
-            <h3>Pending Issues</h3>
-            <p>48</p>
-          </div>
-          <div class="card">
-            <h3>Solved</h3>
-            <p>77</p>
-          </div>
-          <div class="card">
-            <h3>Users</h3>
-            <p>150+</p>
-          </div>
-          <div class="card">
-            <h3>Most Reported Area</h3>
-            <p>Downtown</p>
-          </div>
-          <div class="card">
-            <h3>Feedback Score</h3>
-            <p>⭐ 4.6</p>
-          </div>
-        </div>
-
-        <!-- Charts -->
-        <div class="chart-grid">
-          <div class="chart-section">
-            <h3>Monthly Reports</h3>
-            <canvas id="lineChart"></canvas>
-          </div>
-          <div class="chart-section">
-            <h3>Area-wise Comparison</h3>
-            <canvas id="barChart"></canvas>
-          </div>
-        </div>
-
-        <!-- Button -->
-        <div style="margin-top: 30px;">
-          <button onclick="alert('Simulated Export')">📤 Export Dashboard</button>
-        </div>
+      <div class="chart-card">
+        <h3>Monthly Reports</h3>
+        <canvas id="barChart"></canvas>
       </div>
-    </div>
-  </div>
+      <div class="chart-card">
+        <h3>Daily Submissions</h3>
+        <canvas id="lineChart"></canvas>
+      </div>
+    </section>
 
+    <!-- Extras -->
+    <section class="extras-grid">
+      <div class="card overview-card">
+        <h3>System Overview</h3>
+        <p>Platform health is stable. All modules running optimally.</p>
+      </div>
+      <div class="card rating-card">
+        <h3>User Ratings</h3>
+        <p>⭐ 4.6 / 5.0 average rating from 200+ feedbacks</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Chart.js Script -->
   <script>
-    new Chart(document.getElementById('lineChart').getContext('2d'), {
-      type: 'line',
+    // Pie Chart
+    new Chart(document.getElementById("pieChart"), {
+      type: 'pie',
       data: {
-        labels: ['Jan','Feb','Mar','Apr','May','Jun'],
+        labels: ["Dhaka", "Chittagong", "Khulna", "Rajshahi", "Sylhet"],
         datasets: [{
-          label: 'Reports',
-          data: [15, 30, 25, 40, 20, 60],
-          borderColor: '#2e2e2e',
-          backgroundColor: 'rgba(46,46,46,0.1)',
-          fill: true,
-          tension: 0.3
+          data: [35, 25, 15, 15, 10],
+          backgroundColor: ["#333", "#666", "#999", "#111", "#555"]
         }]
-      },
-      options: { plugins:{legend:{labels:{color:'#444'}}}, scales:{x:{ticks:{color:'#666'}}, y:{ticks:{color:'#666'}}} }
+      }
     });
 
-    new Chart(document.getElementById('barChart').getContext('2d'), {
+    // Bar Chart
+    new Chart(document.getElementById("barChart"), {
       type: 'bar',
       data: {
-        labels: ['Downtown', 'Uptown', 'Suburbs'],
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
         datasets: [{
-          label: 'Issues',
-          data: [50, 30, 20],
-          backgroundColor: ['#555', '#888', '#aaa']
+          label: 'Reports',
+          data: [30, 45, 60, 40, 80, 70],
+          backgroundColor: '#111'
         }]
       },
-      options: { plugins:{legend:{labels:{color:'#444'}}}, scales:{x:{ticks:{color:'#666'}}, y:{ticks:{color:'#666'}}} }
+      options: {
+        responsive: true,
+        scales: { y: { beginAtZero: true } }
+      }
+    });
+
+    // Line Chart
+    new Chart(document.getElementById("lineChart"), {
+      type: 'line',
+      data: {
+        labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        datasets: [{
+          label: 'Submissions',
+          data: [12, 19, 3, 5, 2, 3, 7],
+          borderColor: '#000',
+          borderWidth: 2,
+          fill: false
+        }]
+      },
+      options: {
+        responsive: true
+      }
     });
   </script>
+
 </body>
 </html>
+
 
 
