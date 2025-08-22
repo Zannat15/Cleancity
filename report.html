@@ -1,73 +1,236 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CleanCity | Report</title>
-  <link rel="stylesheet" href="style.css"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanCity - Report Issue</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', sans-serif;}
+body {background:#E3C39D; display:flex; flex-direction:column; min-height:100vh;}
+.cc-navbar {display:flex;justify-content:space-between;align-items:center;padding:1.5rem 3.5rem;background: #0e2252;;color:#fff;position:sticky;top:0;z-index:100;}
+.cc-navbar .logo img {height:40px;}
+.cc-navbar a {color:#fff;text-decoration:none;margin-left:1.5rem;font-weight:500;}
+.cc-navbar a:hover {color:#90ee90;}
+.cc-header {height:70vh; background:url("./report1.jpg") no-repeat center center/cover; position:relative;}
+.cc-content {max-width:1100px; margin:-100px auto 2rem; padding:0 2rem; width:100%; z-index:10; position:relative;}
+.cc-card {background:#ffffffc0;border-radius:12px;padding:2rem;margin-bottom:2rem; box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+.cc-card__title {font-size:1.3rem;font-weight:600;margin-bottom:1.2rem;color:#222;}
+.cc-formgrid {display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;}
+.cc-field {display:flex;flex-direction:column;}
+.cc-label {margin-bottom:.3rem;font-weight:500;color:#444;}
+.cc-input, .cc-textarea, .cc-select {padding:.6rem;border:1px solid #ccc;border-radius:6px;}
+.cc-textarea {resize:vertical;min-height:100px;}
+.cc-actions {grid-column:span 2;text-align:right;}
+.cc-btn {padding:.6rem 1.2rem;border-radius:6px;font-weight:500;cursor:pointer;border:none;}
+.cc-btn--primary {background:#006400;color:#fff;}
+.cc-btn--primary:hover {background:#004d00;}
+.history-list {display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:1rem; list-style:none;}
+.history-card {display:flex;flex-direction:column;background:#fafafa;border:1px solid #ddd;border-radius:8px;padding:1rem;box-shadow:0 2px 8px rgba(0,0,0,0.05);}
+.history-card img {max-width:100%; max-height:150px; margin-top:.5rem; border-radius:6px; object-fit:cover;}
+.history-card span {display:block;margin:2px 0;font-size:0.95rem;}
+.status-pending {color:orange;font-weight:600;}
+.status-inprocess {color:blue;font-weight:600;}
+.status-done {color:green;font-weight:600;}
+footer { background:#071739;color:#fff;padding:2rem;margin-top:auto; }
+.footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:2rem; }
+footer h4 {margin-bottom:.8rem;}
+footer ul {list-style:none;}
+footer ul li {margin-bottom:.4rem;}
+footer ul li a {color:#fff;text-decoration:none;}
+footer ul li a:hover {text-decoration:underline;}
+</style>
 </head>
-<body class="has-bg">
+<body>
 
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <img src="./logo3.jpg" alt="CleanCity Logo" class="logo" />
-    <nav>
-      <ul>
-        <li><a href="index.html"class="active">Home</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="report.html"class="active">Report</a></li>
-        <li><a href="view-issues.html">Issues</a></li>
-        <li><a href="history.html">History</a></li>
-        <li><a href="./edit-report.html">Edit Report</a></li>
-        <li><a href="./public-feed.html">Public Feed</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
-      </ul>
-    </nav>
-  </aside>
+<header class="cc-navbar">
+  <div class="logo"><img src="assets/img/logo.png" alt="CleanCity Logo"></div>
+  <nav>
+    <a href="./index.html">Home</a>
+    <a href="./citizen-profile.html">Profile</a>
+    <a href="report.html">Report</a>
+    <a href="./map.html">Map</a>
+    <a href="./citizen-dashboard.html">Dashboard</a>
+    <a href="./">Profile</a>
+  </nav>
+</header>
 
-  <!-- Main Content -->
-  <main class="content">
-    <header class="topbar">
-      <h1>CleanCity</h1>
-      <span class="page-title">Report Waste</span>
-    </header>
+<section class="cc-header"></section>
 
-   <div class="cover-image cover-report">
-  <div class="cover-text">
-    <h2></h2>
+<main class="cc-content">
+  <section class="cc-card">
+    <div class="cc-card__title">Report Waste Issue</div>
+    <form id="reportForm" class="cc-formgrid">
+      <!-- Citizen Name Input -->
+      <div class="cc-field" style="grid-column: span 2;">
+        <label class="cc-label" for="citizenName">Your Name</label>
+        <input type="text" id="citizenName" class="cc-input" placeholder="Enter your name" required>
+      </div>
 
-    <!-- Report Form -->
-    <section class="report-form">
-      <h2>Submit a Waste Issue</h2>
-      <form>
-        <label for="description">Description:</label>
-        <textarea id="description" rows="4" placeholder="Describe the waste issue..."></textarea>
-
-        <label for="city">City:</label>
-        <select id="city" name="city">
-          <option value="">Select a city</option>
-          <option value="dhaka">Dhaka</option>
-          <option value="chittagong">Chittagong</option>
-          <option value="khulna">Khulna</option>
-          <option value="rajshahi">Rajshahi</option>
-          <option value="sylhet">Sylhet</option>
-          <option value="barisal">Barisal</option>
-          <option value="rangpur">Rangpur</option>
-          <option value="mymensingh">Mymensingh</option>
+      <div class="cc-field">
+        <label class="cc-label" for="location">Location (District)</label>
+        <select id="location" class="cc-select" required>
+          <option value="">Select District</option>
         </select>
+      </div>
+      <div class="cc-field">
+        <label class="cc-label" for="type">Issue Type</label>
+        <select id="type" class="cc-select" required>
+          <option value="">Select</option>
+          <option value="Garbage Dump">Garbage Dump</option>
+          <option value="Plastic Waste">Plastic Waste</option>
+          <option value="Hazardous Waste">Hazardous Waste</option>
+        </select>
+      </div>
+      <div class="cc-field" style="grid-column: span 2;">
+        <label class="cc-label">Select Location on Map</label>
+        <input id="mapSearch" type="text" placeholder="Search place..." class="cc-input" style="margin-bottom:.5rem;">
+        <div id="map" style="height:300px;border:1px solid #ccc;border-radius:6px;"></div>
+      </div>
+      <div class="cc-field" style="grid-column: span 2;">
+        <label class="cc-label" for="photo">Upload Photo</label>
+        <input class="cc-input" type="file" id="photo" accept="image/*">
+      </div>
+      <div class="cc-actions">
+        <button type="submit" class="cc-btn cc-btn--primary">Submit Report</button>
+      </div>
+    </form>
+  </section>
 
-        <label for="photo">Upload Photo (simulated):</label>
-        <input type="file" id="photo" accept="image/*" />
+  <section class="cc-card">
+    <div class="cc-card__title">Your Report History</div>
+    <ul id="reportHistory" class="history-list">
+      <li>No reports yet.</li>
+    </ul>
+  </section>
+</main>
 
-        <button type="submit">Submit Report</button>
-      </form>
-    </section>
-  </main>
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h4>About CleanCity</h4>
+      <p>CleanCity is a citizen-powered platform to report, track, and resolve waste issues across the community.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+          <li><a href="./home.jpg">Home</a></li>
+          <li><a href="./public-feed.html">public-feed</a></li>
+          <li><a href="./map.html">Map</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li>Email: support@cleancity.org</li>
+        <li>Phone: +880-123-456-789</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Districts
+const districts=["Dhaka","Chattogram","Khulna","Rajshahi","Barishal","Sylhet","Rangpur","Mymensingh"];
+const locationSelect=document.getElementById("location");
+districts.forEach(d=>{
+  const option=document.createElement("option");
+  option.value=d; option.textContent=d;
+  locationSelect.appendChild(option);
+});
+
+// Map
+const map=L.map('map').setView([23.685,90.356],7);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+let marker;
+map.on('click', e=>{
+  const {lat,lng}=e.latlng;
+  if(marker) map.removeLayer(marker);
+  marker=L.marker([lat,lng]).addTo(map);
+  document.getElementById('mapSearch').value=`${lat.toFixed(6)},${lng.toFixed(6)}`;
+});
+
+// Search
+const searchInput=document.getElementById('mapSearch');
+searchInput.addEventListener('keydown', e=>{
+  if(e.key==='Enter'){
+    e.preventDefault();
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${searchInput.value}`)
+    .then(res=>res.json())
+    .then(data=>{
+      if(data && data.length>0){
+        const place=data[0];
+        const lat=parseFloat(place.lat);
+        const lon=parseFloat(place.lon);
+        map.setView([lat,lon],15);
+        if(marker) map.removeLayer(marker);
+        marker=L.marker([lat,lon]).addTo(map);
+      }else alert("Location not found");
+    });
+  }
+});
+
+// Reports
+const form=document.getElementById('reportForm');
+const history=document.getElementById('reportHistory');
+let reports = JSON.parse(localStorage.getItem("reports")) || [];
+
+
+function renderReports(){
+  if(reports.length===0){ history.innerHTML="<li>No reports yet.</li>"; return; }
+  history.innerHTML = reports.map((r,index) => `
+    <li class="history-card">
+      <span><strong>Name:</strong> ${r.citizen}</span>
+      <span><strong>Type:</strong> ${r.type}</span>
+      <span><strong>District:</strong> ${r.location}</span>
+      <span><strong>Map:</strong> ${r.map}</span>
+      <span><strong>Status:</strong> <span class="${r.status.toLowerCase().replace(' ','')}">${r.status}</span></span>
+      ${r.photo ? `<img src="${r.photo}" alt="Report Photo">` : '<span>No Photo</span>'}
+      <button class="cc-btn" style="margin-top:0.5rem; background:red; color:white;" onclick="deleteReport(${index})">Delete</button>
+    </li>
+  `).join('');
+}
+
+// Delete report function
+function deleteReport(index){
+  if(confirm("Are you sure you want to delete this report?")){
+    reports.splice(index,1);
+    localStorage.setItem("reports",JSON.stringify(reports));
+    renderReports();
+  }
+}
+
+renderReports();
+
+form.addEventListener('submit', e=>{
+  e.preventDefault();
+  const citizenName=document.getElementById('citizenName').value.trim();
+  if(!citizenName){ alert("Please enter your name."); return; }
+
+  const file=document.getElementById('photo').files[0];
+  if(file){
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const report={ citizen:citizenName, location:locationSelect.value, type:document.getElementById('type').value,
+        map:searchInput.value, photo:e.target.result, status:"Pending" };
+      reports.push(report);
+      localStorage.setItem("reports",JSON.stringify(reports));
+      renderReports();
+      form.reset(); searchInput.value=''; if(marker){ map.removeLayer(marker); marker=null; }
+    };
+    reader.readAsDataURL(file);
+  }else{
+    const report={ citizen:citizenName, location:locationSelect.value, type:document.getElementById('type').value,
+      map:searchInput.value, photo:null, status:"Pending" };
+    reports.push(report);
+    localStorage.setItem("reports",JSON.stringify(reports));
+    renderReports();
+    form.reset(); searchInput.value=''; if(marker){ map.removeLayer(marker); marker=null; }
+  }
+});
+</script>
+
 </body>
 </html>
-
-
-
-

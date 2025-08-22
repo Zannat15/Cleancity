@@ -1,83 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CleanCity | Public Report Feed</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanCity - Public Feed</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', sans-serif;}
+body {background:#E3C39D; display:flex; flex-direction:column; min-height:100vh;}
+.cc-navbar {display:flex;justify-content:space-between;align-items:center;padding:1rem 3rem;background:#0e2252;color:#fff;position:sticky;top:0;z-index:100;}
+.cc-navbar .logo img {height:40px;}
+.cc-navbar a {color:#fff;text-decoration:none;margin-left:1.5rem;font-weight:500;}
+.cc-navbar a:hover {color:#90ee90;}
+.cc-header {height:55vh;background:url("./feed.jpg") no-repeat center center/cover; position:relative;}
+.cc-content {max-width:1200px; margin:-80px auto 2rem; padding:0 2rem; width:100%; z-index:10; position:relative;}
+h2 {margin-bottom:1rem;color:#222;}
+.report-table {width:100%; border-collapse:collapse; background:#fff; border-radius:10px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+.report-table th, .report-table td {padding:0.8rem; text-align:left; border-bottom:1px solid #ddd; font-size:0.95rem;}
+.report-table th {background:#4b4a73; color:#fff;}
+.report-photo {width:80px;height:60px;object-fit:cover;border-radius:6px;}
+.upvote-btn {background:#677684;color:#fff;padding:0.3rem 0.8rem;border:none;border-radius:6px;cursor:pointer;font-size:0.85rem;}
+.upvote-btn:hover {background:#eef2ee;}
+footer {background:#071739;color:#fff;padding:2rem;margin-top:auto;}
+.footer-grid {display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;}
+footer h4 {margin-bottom:.8rem;}
+footer ul {list-style:none;}
+footer ul li {margin-bottom:.4rem;}
+footer ul li a {color:#fff;text-decoration:none;}
+footer ul li a:hover {text-decoration:underline;}
+</style>
 </head>
 <body>
 
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <img src="./logo3.jpg" alt="CleanCity Logo" class="logo" />
-    <nav>
+<header class="cc-navbar">
+  <div class="logo"><img src="./logo1.jpg" alt="CleanCity Logo"></div>
+  <nav>
+    <a href="./index.html">Home</a>
+    <a href="./map.html">Map</a>
+    <a href="./logout.html">Logout</a>
+  </nav>
+</header>
+
+<section class="cc-header"></section>
+
+<main class="cc-content">
+  <h2>Community Report Feed</h2>
+  <table class="report-table" id="feedTable">
+    <thead>
+      <tr>
+        <th>Photo</th>
+        <th>Type</th>
+        <th>Citizen</th>
+        <th>Location</th>
+        <th>Upvotes</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="feedBody"></tbody>
+  </table>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h4>About CleanCity</h4>
+      <p>CleanCity is a citizen-powered platform to report, track, and resolve waste issues across the community.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
       <ul>
-        <li><a href="index.html"class="active">Home</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="report.html">Report</a></li>
-        <li><a href="view-issues.html">Issues</a></li>
-        <li><a href="history.html">History</a></li>
-        <li><a href="./edit-report.html">Edit Report</a></li>
-        <li><a href="./public-feed.html"class="active">Public Feed</a></li>
-        <li><a href="dashboard.html">Dashboard</a></li>
+          <li><a href="./home.jpg">Home</a></li>
+          <li><a href="./public-feed.html">public-feed</a></li>
+          <li><a href="./map.html">Map</a></li>
       </ul>
-    </nav>
-  </aside>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li>Email: support@cleancity.org</li>
+        <li>Phone: +880-123-456-789</li>
+      </ul>
+    </div>
+  </div>
+</footer>
 
-  <!-- Main Content -->
-  <main class="content">
-    <!-- Header -->
-    <header class="topbar">
-      <h1>CleanCity</h1>
-      <span class="page-title">Public Feed</span>
-    </header>
+<script>
+// Dummy reports
+const dummyReports = [
+  { type: "Overflowing Dustbin", citizen: "Rahim", location: "Dhaka", photo: "https://via.placeholder.com/80x60", upvotes: 2 },
+  { type: "Illegal Dumping", citizen: "Karim", location: "Chittagong", photo: "https://via.placeholder.com/80x60", upvotes: 5 },
+  { type: "Garbage Burning", citizen: "Sadia", location: "Sylhet", photo: "https://via.placeholder.com/80x60", upvotes: 1 }
+];
 
-    <section class="public-feed">
-      <div class="feed-card">
-        <div class="feed-header">
-          <h3>Garbage piling in Mohakhali</h3>
-          <span class="status-feed">Pending</span>
-        </div>
-        <p class="feed-location">Dhaka, Bangladesh</p>
-        <div class="progress-bar-container">
-          <div class="progress-label">Upvotes</div>
-          <div class="progress-bar">
-            <div class="progress" style="width: 60%;"></div>
-          </div>
-          <div class="progress-percent">60%</div>
-        </div>
-        <div class="feed-actions">
-          <button class="upvote">👍 Upvote</button>
-          <button class="view-more">View Details</button>
-        </div>
-      </div>
+// Load reports from localStorage
+let savedReports = JSON.parse(localStorage.getItem("reports")) || [];
 
-      <div class="feed-card">
-        <div class="feed-header">
-          <h3>Open drain flooding during rain</h3>
-          <span class="status-feed solved">Solved</span>
-        </div>
-        <p class="feed-location">Chittagong, Bangladesh</p>
-        <div class="progress-bar-container">
-          <div class="progress-label">Upvotes</div>
-          <div class="progress-bar">
-            <div class="progress" style="width: 100%; background-color: #444;"></div>
-          </div>
-          <div class="progress-percent">100%</div>
-        </div>
-        <div class="feed-actions">
-          <button class="upvote">👍 Upvote</button>
-          <button class="view-more">View Details</button>
-        </div>
-      </div>
-    </section>
-  </main>
+// Merge dummy + saved reports
+let reports = [...dummyReports, ...savedReports];
+
+const feedBody = document.getElementById("feedBody");
+
+function renderFeed() {
+  feedBody.innerHTML = reports.map((r,index)=>`
+    <tr>
+      <td><img src="${r.photo}" alt="Report" class="report-photo"></td>
+      <td>${r.type}</td>
+      <td>${r.citizen}</td>
+      <td>${r.location}</td>
+      <td>${r.upvotes || 0}</td>
+      <td><button class="upvote-btn" onclick="upvote(${index})">👍 Upvote</button></td>
+    </tr>
+  `).join('');
+}
+
+function upvote(index){
+  if(!reports[index].upvotes) reports[index].upvotes = 0;
+  reports[index].upvotes++;
+  // Only save the ones from localStorage to persist
+  const localOnly = reports.filter(r => savedReports.includes(r) || !dummyReports.includes(r));
+  localStorage.setItem("reports", JSON.stringify(localOnly));
+  renderFeed();
+}
+
+renderFeed();
+</script>
 
 </body>
 </html>
-
-
-

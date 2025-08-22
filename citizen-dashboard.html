@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CleanCity — Citizen Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+
+<style>
+  :root{
+    --bg:#0f1221;
+    --card:#151936;
+    --card-2:#1a1f45;
+    --text:#e8ebff;
+    --muted:#a9b1d6;
+    --accent-1:#6c8bff;
+    --accent-2:#ff8a65;
+    --accent-3:#6ee7b7;
+    --accent-4:#ffe066;
+    --danger:#ff5c7a;
+    --ok:#61d095;
+    --warn:#ffcc66;
+    --shadow: 0 10px 30px rgba(0,0,0,.35);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:linear-gradient(180deg,#bdbfca,#d2d3d9 45%, #69adbc);
+    color:var(--text); font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;
+  }
+  /* Top Navbar */
+  .navbar{
+    position:sticky; top:0; z-index:30;
+    background:linear-gradient(90deg,#10074c, #0b0541);
+    padding:14px 20px; ;
+  }
+.nav-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 2200px;
+  margin: 0 auto;
+  padding: 0 20px; /* extra padding to push links away from logo */
+}
+
+.nav-links {
+  display: flex;
+  gap: 2px; /* increase space between each link */
+}
+
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+  .brand-badge{
+    width:34px; height:34px; display:grid; place-content:center; border-radius:12px;
+    background:#ffffff22; border:1px solid #ffffff40; font-weight:800;
+  }
+  
+  .nav-links a{
+    color:#fff; text-decoration:none; font-weight:600; opacity:.95;
+    padding:10px 14px; border-radius:999px; transition:.2s;
+  }
+  .nav-links a:hover{background:#ffffff22}
+  /* Page Container & Grid */
+  .container{max-width:1200px; margin:24px auto; padding:0 16px 60px}
+  .grid{
+    display:grid; grid-template-columns:repeat(12,1fr); gap:18px;
+  }
+  .card{
+    background: rgb(6, 9, 59); border:1px solid #ffffff10; border-radius:var(--radius);
+    padding:16px 16px 14px;
+  }
+  .card h3{margin:0 0 10px; font-size:15px; color:var(--muted); font-weight:600; letter-spacing:.25px}
+  .metric{
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .metric .value{font-size:28px; font-weight:800}
+  .chip{
+    font-size:12px; padding:6px 10px; border-radius:999px; font-weight:700;
+    border:1px solid #ffffff1f; background:#ffffff12;
+  }
+  .chip.ok{color:#0be7a8; border-color:#0be7a84a; background:#0be7a812}
+  .chip.warn{color:#ffd66b; border-color:#ffd66b4a; background:#ffd66b12}
+  .chip.bad{color:#ff7597; border-color:#ff75974a; background:#ff759712}
+  /* Sizes (no empty space, like the reference) */
+  .col-3{grid-column:span 3}
+  .col-4{grid-column:span 4}
+  .col-5{grid-column:span 5}
+  .col-6{grid-column:span 6}
+  .col-7{grid-column:span 7}
+  .col-8{grid-column:span 8}
+  .col-12{grid-column:span 12}
+  /* Specialty cards */
+  .stack{display:flex; gap:12px; align-items:center}
+  .icon{
+    width:42px; height:42px; border-radius:12px; display:grid; place-content:center;
+    background:linear-gradient(135deg,#ffffff14,transparent); border:1px solid #ffffff1a;
+    font-weight:800;
+  }
+  .progress{
+    height:10px; background:#ffffff14; border-radius:999px; overflow:hidden; margin-top:8px;
+  }
+  .progress > span{display:block; height:100%; background:linear-gradient(90deg,#6ee7b7,#4adeff); border-radius:999px}
+  .list{margin:6px 0 0; padding:0; list-style:none}
+  .list li{display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px dashed #ffffff16}
+  .list li:last-child{border-bottom:0}
+  .badge{font-size:12px; padding:6px 8px; border-radius:10px; background:var(--card-2); border:1px solid #ffffff10}
+  .map{
+    height:220px; border-radius:14px; background:
+      radial-gradient(120px 80px at 35% 40%, #0dc2ff15, transparent 60%),
+      radial-gradient(120px 80px at 70% 65%, #6c8bff15, transparent 60%),
+      #0f132e;
+    border:1px dashed #ffffff25;
+    position:relative; overflow:hidden;
+  }
+  .pin{
+    position:absolute; width:12px; height:12px; background:#ff6b6b; border-radius:50%; box-shadow:0 0 0 6px #ff6b6b22;
+  }
+  /* Rate & buttons */
+  .rate-wrap{display:flex; align-items:center; gap:8px}
+  .star{cursor:pointer; font-size:20px; opacity:.6; transition:.15s}
+  .star.active{opacity:1; transform:scale(1.05)}
+  button.primary{
+    border:0; background:linear-gradient(90deg,#6c8bff,#0dc2ff); color:#fff; padding:10px 14px;
+    border-radius:12px; font-weight:700; cursor:pointer; box-shadow:var(--shadow);
+  }
+  button.ghost{border:1px solid #ffffff25; background:#ffffff10; color:#fff; padding:10px 12px; border-radius:12px; font-weight:700; cursor:pointer}
+  /* Tables */
+  table{width:100%; border-collapse:collapse; font-size:13px}
+  th,td{padding:10px 8px; border-bottom:1px solid #ffffff12}
+  th{text-align:left; color:var(--muted); font-weight:700; font-size:12px; letter-spacing:.3px}
+  .status{padding:6px 8px; font-weight:700; border-radius:999px; font-size:11px}
+  .status.pending{background:#ffd66b22; color:#ffd66b}
+  .status.resolved{background:#61d09522; color:#61d095}
+  .status.open{background:#ff759722; color:#ff7597}
+  /* Footer */
+  .footer{margin-top:22px; color:#9aa3d7; font-size:12px; opacity:.8; text-align:center}
+  /* Responsive */
+  @media (max-width:1100px){
+    .col-7{grid-column:span 6}
+    .col-5{grid-column:span 6}
+    .col-8{grid-column:span 12}
+  }
+  @media (max-width:780px){
+    .grid{grid-template-columns:repeat(6,1fr)}
+    .col-7,.col-5,.col-6,.col-8,.col-4,.col-3{grid-column:span 6}
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<header class="navbar">
+  <div class="nav-wrap">
+    <div class="brand">
+      <div class="brand-badge">CC</div>
+      <div>CleanCity Dashboard</div>
+    </div>
+    <div class="nav-links">
+      <a href="./citizen-profile.html">Profile</a>
+      <a href="#overview">Dashboard</a>
+      
+      <a href="#community">Community</a>
+      <a href="#notifications">Notifications</a>
+      
+      <a href="./map.html">Map</a>
+      <a href="./public-feed.html">publicfeed</a>
+      <a href="./logout.html">logout</a>
+      
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <!-- SUMMARY STRIP -->
+  <section id="overview" class="grid" style="margin-bottom:8px">
+    <div class="card col-3">
+      <h3>My Reports Submitted</h3>
+      <div class="metric"><div class="value" id="kpi-total">0</div><span class="chip ok">+12% m/m</span></div>
+      <canvas id="sparkl1" height="50"></canvas>
+    </div>
+
+    <div class="card col-3">
+      <h3>Pending Reports</h3>
+      <div class="metric"><div class="value" id="kpi-pending">0</div><span class="chip warn">In progress</span></div>
+      <canvas id="sparkl2" height="50"></canvas>
+    </div>
+
+    <div class="card col-3">
+      <h3>Resolved Reports</h3>
+      <div class="metric"><div class="value" id="kpi-resolved">0</div><span class="chip ok">Good job!</span></div>
+      <canvas id="sparkl3" height="50"></canvas>
+    </div>
+
+    <div class="card col-3">
+      <h3>Community Impact Score</h3>
+      <div class="metric"><div class="value" id="kpi-impact">0</div><span class="chip">issues helped</span></div>
+      <div class="progress"><span id="impact-bar" style="width:60%"></span></div>
+      <div style="font-size:12px;color:var(--muted); margin-top:8px">How many issues were resolved due to your reports.</div>
+    </div>
+
+    <div class="card col-8">
+      <h3>Total Sales? No — <strong style="color:#fff">Your City Analytics</strong></h3>
+      <canvas id="lineClean" height="110"></canvas>
+    </div>
+
+    <div class="card col-4">
+      <h3>Issue Type Breakdown</h3>
+      <canvas id="pieType" height="110"></canvas>
+    </div>
+  </section>
+
+  <!-- MID ROW: REPORTS TABLE & UPDATES -->
+  <section class="grid" id="reports">
+    <div class="card col-7">
+      <div class="stack" style="justify-content:space-between">
+        <h3 style="margin:0">My Reported Issues (3–4 dummy, not others’)</h3>
+        <button class="primary" id="btnAddDemo">Add Demo Report</button>
+      </div>
+      <table id="tblReports">
+        <thead>
+          <tr>
+            <th>Issue</th><th>Type</th><th>Date</th><th>Area</th><th>Status</th><th>Action</th>
+          </tr>
+        </thead>
+        <tbody><!-- filled by JS --></tbody>
+      </table>
+      <div style="margin-top:10px"><button class="ghost" id="btnViewAll">View Full Report Details</button></div>
+    </div>
+
+    <div class="card col-5" id="notifications">
+      <h3>Status Updates & Alerts</h3>
+      <ul class="list" id="updateList"><!-- JS --></ul>
+    </div>
+
+    <div class="card col-4" id="community">
+      <h3>Area Cleanliness Rating</h3>
+      <div class="stack" style="gap:14px">
+        <div class="icon">🌆</div>
+        <div style="flex:1">
+          <div style="font-weight:800; font-size:22px" id="areaScore">0</div>
+          <div class="progress"><span id="areaBar" style="width:0%"></span></div>
+        </div>
+        <span class="chip ok" id="areaLabel">Healthy</span>
+      </div>
+      <h3 style="margin-top:14px">Top Issues in My Area</h3>
+      <ul class="list" id="topIssues"><!-- JS --></ul>
+    </div>
+
+    <div class="card col-4">
+      <h3>Map — Nearby Issues (static)</h3>
+      <div class="map" id="mapBox">
+        <!-- Pins created by JS -->
+      </div>
+    </div>
+
+    <div class="card col-4">
+      <h3>My Activity vs Community Avg</h3>
+      <canvas id="barCompare" height="130"></canvas>
+    </div>
+  </section>
+
+  <!-- BOTTOM: GAMIFICATION / RATE / ACK -->
+  <section class="grid" id="rate">
+    <div class="card col-4">
+      <h3>Badges</h3>
+      <div class="stack">
+        <div class="icon">🏅</div><div><div class="badge">Active Reporter</div><div class="badge" style="margin-left:6px">Community Helper</div></div>
+      </div>
+      <h3 style="margin-top:14px">Impact Counter</h3>
+      <div class="metric"><div class="value" id="impactCounter">0</div><span class="chip ok">Resolved via you</span></div>
+      <div class="progress"><span id="impactCounterBar" style="width:0%"></span></div>
+    </div>
+
+    <div class="card col-4">
+      <h3>Give City Service Rating</h3>
+      <div class="rate-wrap" id="rateStars" aria-label="rate">
+        <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+      </div>
+      <div style="margin-top:8px; color:var(--muted); font-size:13px">Your rating helps prioritize improvements.</div>
+      <div style="margin-top:10px; display:flex; gap:10px">
+        <button class="primary" id="btnSaveRating">Submit Rating</button>
+        <div class="chip" id="ratingLabel">Not rated</div>
+      </div>
+      <h3 style="margin-top:14px">Rating History</h3>
+      <ul class="list" id="ratingHistory"><!-- JS --></ul>
+    </div>
+
+    <div class="card col-4" id="ack">
+      <h3>Authority Acknowledgments</h3>
+      <ul class="list" id="ackList"><!-- JS --></ul>
+      <button class="ghost" id="btnAddAck">Add Demo Acknowledgment</button>
+    </div>
+
+    <div class="card col-8">
+      <h3>Reports Per Month</h3>
+      <canvas id="barMonths" height="130"></canvas>
+    </div>
+    <div class="card col-4">
+      <h3>Distribution — Status</h3>
+      <canvas id="donutStatus" height="130"></canvas>
+    </div>
+  </section>
+
+  <div class="footer">© CleanCity — Citizen Dashboard. Built with love for your city.</div>
+</main>
+
+<script>
+/* -------------------- "Backend" (LocalStorage) --------------------- */
+const DB = {
+  key: 'cc_citizen_dashboard_v1',
+  read(){
+    try{ return JSON.parse(localStorage.getItem(this.key)) || null; }catch{ return null; }
+  },
+  write(state){ localStorage.setItem(this.key, JSON.stringify(state)); }
+};
+
+function seedIfEmpty(){
+  if(DB.read()) return;
+  const seed = {
+    ratingHistory: [],
+    currentRating: 0,
+    impact: 12,
+    areaScore: 78, // out of 100
+    myReports: [
+      { id:1, title:'Overflowing roadside garbage bin', type:'Garbage', date:'2025-08-10', area:'Ward 12', status:'pending' },
+      { id:2, title:'Blocked drain near school', type:'Drains', date:'2025-08-12', area:'Ward 7', status:'open' },
+      { id:3, title:'Illegal dumping behind market', type:'Dumping', date:'2025-08-14', area:'Ward 3', status:'resolved' },
+      { id:4, title:'Broken public dustbin', type:'Garbage', date:'2025-08-17', area:'Ward 5', status:'pending' }
+    ],
+    acknowledgments: [
+      {msg:'Your report #3 helped our team clear illegal dumping. Thank you!', time:'2d ago'},
+      {msg:'Acknowledged: drain cleaning scheduled based on your report #2.', time:'5d ago'}
+    ],
+    notifications: [
+      {msg:'Report #1 assigned to Zone Team A', time:'1h ago'},
+      {msg:'New issue near you: roadside litter at Ward 11', time:'4h ago'},
+      {msg:'Report #3 marked Resolved', time:'2d ago'}
+    ]
+  };
+  DB.write(seed);
+}
+seedIfEmpty();
+
+/* -------------------- Utilities --------------------- */
+const $ = (sel, node=document)=>node.querySelector(sel);
+function fmt(n){ return new Intl.NumberFormat().format(n); }
+
+/* -------------------- Populate KPIs & Lists --------------------- */
+const state = DB.read();
+
+function refreshKPIs(){
+  const total = state.myReports.length;
+  const pending = state.myReports.filter(r=>r.status==='pending').length;
+  const resolved = state.myReports.filter(r=>r.status==='resolved').length;
+  $('#kpi-total').textContent = fmt(total);
+  $('#kpi-pending').textContent = fmt(pending);
+  $('#kpi-resolved').textContent = fmt(resolved);
+  $('#kpi-impact').textContent = fmt(state.impact);
+  $('#impact-bar').style.width = Math.min(state.impact*5,100)+'%';
+
+  $('#impactCounter').textContent = fmt(state.impact);
+  $('#impactCounterBar').style.width = Math.min(state.impact*5,100)+'%';
+
+  $('#areaScore').textContent = state.areaScore + '/100';
+  $('#areaBar').style.width = state.areaScore + '%';
+  $('#areaLabel').textContent = state.areaScore>=75?'Healthy':(state.areaScore>=50?'Fair':'Needs Work');
+
+  // top issues list (derived)
+  const byType = {};
+  state.myReports.forEach(r=>{ byType[r.type]=(byType[r.type]||0)+1; });
+  const sorted = Object.entries(byType).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  $('#topIssues').innerHTML = sorted.map(([t,c])=>`<li><span>${t}</span><span class="badge">${c}</span></li>`).join('') || `<li><span>No issues</span><span class="badge">0</span></li>`;
+}
+
+function refreshReportsTable(){
+  const tbody = $('#tblReports tbody');
+  tbody.innerHTML = state.myReports.slice(0,6).map(r=>`
+    <tr>
+      <td>${r.title}</td>
+      <td>${r.type}</td>
+      <td>${r.date}</td>
+      <td>${r.area}</td>
+      <td><span class="status ${r.status}">${r.status}</span></td>
+      <td><button class="ghost" onclick="toggleStatus(${r.id})">Toggle</button></td>
+    </tr>
+  `).join('');
+}
+
+function toggleStatus(id){
+  const r = state.myReports.find(x=>x.id===id);
+  if(!r) return;
+  r.status = r.status==='pending' ? 'resolved' : r.status==='resolved' ? 'open' : 'pending';
+  DB.write(state);
+  refreshReportsTable(); refreshCharts(); refreshKPIs();
+}
+
+function refreshNotifications(){
+  $('#updateList').innerHTML = state.notifications.map(n=>`<li><span>${n.msg}</span><span class="badge">${n.time}</span></li>`).join('');
+  $('#ackList').innerHTML = state.acknowledgments.map(a=>`<li><span>${a.msg}</span><span class="badge">${a.time}</span></li>`).join('');
+}
+
+function addDemoReport(){
+  const id = Math.max(...state.myReports.map(r=>r.id))+1;
+  const types = ['Garbage','Drains','Dumping','Street Light','Sewage'];
+  const t = types[Math.floor(Math.random()*types.length)];
+  const statuses = ['open','pending','resolved'];
+  const status = statuses[Math.floor(Math.random()*statuses.length)];
+  state.myReports.unshift({
+    id, title: t+' issue reported by me', type:t, date:new Date().toISOString().slice(0,10),
+    area:'Ward '+(Math.floor(Math.random()*15)+1), status
+  });
+  state.notifications.unshift({msg:`Report #${id} submitted`, time:'just now'});
+  DB.write(state);
+  refreshReportsTable(); refreshNotifications(); refreshCharts(); refreshKPIs();
+}
+
+$('#btnAddDemo').addEventListener('click', addDemoReport);
+$('#btnViewAll').addEventListener('click', ()=>alert('In a real app this opens a full report details page.\nHere we focus on the dashboard view (your own reports only).'));
+$('#btnAddAck').addEventListener('click', ()=>{
+  state.acknowledgments.unshift({msg:'Thanks for your vigilance! We scheduled cleanup for your latest report.', time:'now'});
+  DB.write(state); refreshNotifications();
+});
+
+/* -------------------- Map Pins (static) --------------------- */
+function drawPins(){
+  const box = $('#mapBox'); box.innerHTML='';
+  const pinPos = [
+    {left: '20%', top:'35%'}, {left:'55%', top:'60%'}, {left:'72%', top:'28%'}, {left:'35%', top:'70%'}
+  ];
+  pinPos.forEach(p=>{
+    const el=document.createElement('div'); el.className='pin';
+    el.style.left=p.left; el.style.top=p.top; box.appendChild(el);
+  });
+}
+
+/* -------------------- Rating --------------------- */
+const starEls = [...document.querySelectorAll('#rateStars .star')];
+function setStars(n){
+  starEls.forEach((s,i)=>s.classList.toggle('active', i < n));
+  $('#ratingLabel').textContent = n ? `You chose ${n}/5` : 'Not rated';
+}
+starEls.forEach((el,idx)=>el.addEventListener('click', ()=>setStars(idx+1)));
+
+$('#btnSaveRating').addEventListener('click', ()=>{
+  const chosen = starEls.filter(s=>s.classList.contains('active')).length;
+  if(!chosen) return alert('Please select a rating (1–5).');
+  state.currentRating = chosen;
+  state.ratingHistory.unshift({stars:chosen, time:new Date().toLocaleString()});
+  // gamification bump:
+  state.impact = Math.min(100, state.impact + Math.ceil(chosen/2));
+  DB.write(state);
+  renderRatingHistory(); refreshKPIs();
+});
+
+function renderRatingHistory(){
+  $('#ratingHistory').innerHTML = (state.ratingHistory.slice(0,5).map(r=>`<li><span>${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span><span class="badge">${r.time}</span></li>`).join('')) || '<li><span>No ratings yet</span><span class="badge">—</span></li>';
+  setStars(state.currentRating);
+}
+
+/* -------------------- Charts --------------------- */
+let charts = {};
+function makeSpark(id, data){
+  const ctx = document.getElementById(id);
+  return new Chart(ctx, {
+    type:'line',
+    data:{labels:data.map((_,i)=>i+1), datasets:[{data, tension:.35, borderWidth:2, pointRadius:0}]},
+    options:{responsive:true, plugins:{legend:{display:false}}, scales:{x:{display:false}, y:{display:false}}}
+  });
+}
+function refreshCharts(){
+  // destroy old
+  Object.values(charts).forEach(c=>c.destroy());
+  // derived counts
+  const byType = {};
+  state.myReports.forEach(r=>byType[r.type]=(byType[r.type]||0)+1);
+  const types = Object.keys(byType);
+  const typeVals = Object.values(byType);
+
+  // status
+  const sOpen = state.myReports.filter(r=>r.status==='open').length;
+  const sPending = state.myReports.filter(r=>r.status==='pending').length;
+  const sResolved = state.myReports.filter(r=>r.status==='resolved').length;
+
+  // charts
+  charts.s1 = makeSpark('sparkl1',[4,6,5,7,9,11, state.myReports.length]);
+  charts.s2 = makeSpark('sparkl2',[2,3,2,4,3,2, sPending]);
+  charts.s3 = makeSpark('sparkl3',[1,2,3,4,5,6, sResolved]);
+
+  charts.pie = new Chart($('#pieType'), {
+    type:'doughnut',
+    data:{labels:types, datasets:[{data:typeVals}]},
+    options:{plugins:{legend:{position:'bottom'}}}
+  });
+
+  charts.line = new Chart($('#lineClean'), {
+    type:'line',
+    data:{
+      labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets:[
+        {label:"City Cleanliness Trend", data:[55,57,60,62,64,63,66,68,70,72,73,75], tension:.35},
+        {label:"Your Area", data:[52,54,58,60,61,62,65,67,69,70,72,74], borderDash:[6,6], tension:.35}
+      ]
+    },
+    options:{plugins:{legend:{display:true}}, scales:{y:{beginAtZero:true, max:100}}}
+  });
+
+  charts.months = new Chart($('#barMonths'), {
+    type:'bar',
+    data:{
+      labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets:[
+        {label:'My Reports', data:[1,1,2,2,1,3,1,4,2,1,2,1]}
+      ]
+    },
+    options:{plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true}}}
+  });
+
+  charts.compare = new Chart($('#barCompare'), {
+    type:'bar',
+    data:{
+      labels:['Garbage','Drains','Dumping','Light','Sewage'],
+      datasets:[
+        {label:'Me', data:[byType['Garbage']||0, byType['Drains']||0, byType['Dumping']||0, byType['Street Light']||0, byType['Sewage']||0]},
+        {label:'Community Avg', data:[3,2,1,1,1]}
+      ]
+    },
+    options:{scales:{y:{beginAtZero:true}}}
+  });
+
+  charts.donut = new Chart($('#donutStatus'), {
+    type:'doughnut',
+    data:{labels:['Open','Pending','Resolved'], datasets:[{data:[sOpen, sPending, sResolved]}]},
+    options:{plugins:{legend:{position:'bottom'}}}
+  });
+}
+
+/* -------------------- Init & Bind --------------------- */
+function init(){
+  refreshKPIs();
+  refreshReportsTable();
+  refreshNotifications();
+  drawPins();
+  renderRatingHistory();
+  refreshCharts();
+
+  // Also fill map pins reactively when viewport resizes
+  window.addEventListener('resize', drawPins);
+}
+init();
+</script>
+</body>
+</html>

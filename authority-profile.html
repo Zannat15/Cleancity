@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CleanCity – Authority Profile</title>
+<style>
+  /* -------------------- BASE -------------------- */
+  * { box-sizing: border-box; }
+  :root{
+    --brand:#0a7b4e;
+    --muted:#64748b;
+    --card:#ffffff;
+    --bg:#f1f5f9;
+    --ring:rgba(10,123,78,.25);
+    --shadow: 0 10px 30px rgba(0,0,0,.12);
+    --radius:18px;
+  }
+  body{margin:0; font-family: "Segoe UI", sans-serif; background:#E3C39D; display:flex; flex-direction:column;}
+  a{text-decoration:none; color:inherit;}
+
+  /* -------------------- BANNER -------------------- */
+  .cc-banner{position:relative; height:70vh; min-height:360px; background:url("./authority2.jpg") center/cover no-repeat; overflow:hidden;}
+  .cc-banner::after{content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(0,0,0,.0) 55%, rgba(0,0,0,.28) 100%); pointer-events:none;}
+
+  /* -------------------- NAVBAR -------------------- */
+  .cc-navbar{position:absolute; top:0; left:0; right:0; display:flex; justify-content:space-between; align-items:center; padding:16px 28px; background-color:#0e2252; z-index:3;}
+  .cc-navbar .brand{display:flex; align-items:center; gap:12px; font-weight:700; color:#f1f5f9; text-shadow:0 2px 6px rgba(18, 16, 16, 0.915);}
+  .cc-navbar .brand img{height:40px; width:40px;}
+  .cc-navlinks a{color:#eef2f7;margin-left:20px; padding:8px 10px; border-radius:10px; font-weight:500; transition:.2s;}
+  .cc-navlinks a:hover{background:rgb(247, 244, 244);}
+
+  /* -------------------- MAIN -------------------- */
+  .cc-wrap{width:min(1200px, 92%); margin:-88px auto 32px; position:relative; z-index:5;}
+  .cc-grid{display:grid; gap:24px; grid-template-columns:1fr 2fr;}
+  .cc-card{background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); padding:22px; background-color:rgba(255, 255, 255, 0.297);}
+  .cc-card.headlined{padding-top:0; overflow:hidden;}
+  .cc-card .cap{padding:14px; font-weight:700; text-align:center;}
+  .cc-card .body{padding:20px;}
+
+  /* -------------------- PROFILE -------------------- */
+  .cc-user{text-align:center;}
+  .cc-avatar{width:112px;height:112px;border-radius:50%;display:block;margin:10px auto 14px;border:4px solid #fff; box-shadow:0 6px 14px rgba(0,0,0,.15);}
+  .cc-name{font-size:1.25rem;font-weight:700;margin:.25rem 0 .15rem;}
+  .cc-role{color:var(--muted); margin-bottom:14px;}
+  .cc-sep{border:0;border-top:1px solid #e5e7eb;margin:16px 0;}
+  .cc-stats{list-style:none;padding:0;margin:0 0 16px;text-align:left;}
+  .cc-stats li{display:flex; justify-content:space-between; padding:6px 2px;}
+  .cc-btn{display:inline-block;width:100%;padding:10px 12px;border-radius:12px;border:1px solid #cbd5e1; background:#f8fafc;font-weight:600;text-align:center; cursor:pointer;}
+  .cc-btn:hover{background:#eef2f7;}
+
+  /* -------------------- FORM -------------------- */
+  .cc-formgrid{display:grid; gap:14px; grid-template-columns:1fr 1fr;}
+  .cc-field{display:flex; flex-direction:column; gap:6px;}
+  .cc-label{font-weight:600;color:#475569;}
+  .cc-input{border:1px solid #cbd5e1; border-radius:12px;padding:12px 14px; font:inherit; outline:none; background:#fff;}
+  .cc-input:focus{border-color:var(--brand); box-shadow:0 0 0 4px var(--ring);}
+  .cc-actions{grid-column:1 / -1; display:flex; justify-content:flex-end;}
+  .cc-primary{background:var(--brand); color:#fff; border:none; padding:10px 16px; border-radius:12px; font-weight:700; cursor:pointer;}
+  .cc-primary:hover{background:#475569;}
+
+  /* -------------------- BOTTOM CARDS -------------------- */
+  .cc-bottom{margin-top:26px; display:grid; gap:24px; grid-template-columns:1fr 1fr 1fr;}
+  .cc-bottom h4{margin:0 0 10px;}
+  .cc-chipbtn{display:inline-block; padding:10px 14px; border-radius:12px; background:#f1f5f9; border:1px solid #cbd5e1; cursor:pointer;}
+  .cc-activities{margin:0; padding-left:18px;}
+  .cc-activities li{margin:6px 0;}
+
+  /* -------------------- FOOTER -------------------- */
+  footer{margin-top:auto; background:#071739;color:#fff;}
+  .footwrap{width:min(1200px,92%); margin:0 auto; padding:28px 0; display:grid; gap:24px; grid-template-columns:2fr 1fr 1fr;}
+  footer h4{margin:.2rem 0 .6rem;}
+  footer ul{list-style:none;padding:0;margin:0;}
+  footer li{margin:6px 0;}
+  footer a{color:#fff;}
+  footer a:hover{text-decoration:underline;}
+
+  /* -------------------- RESPONSIVE -------------------- */
+  @media (max-width:960px){.cc-grid{grid-template-columns:1fr;}.cc-bottom{grid-template-columns:1fr;}.cc-wrap{margin-top:-70px;}}
+</style>
+</head>
+<body>
+<div class="cc-banner">
+  <div class="cc-navbar">
+    <div class="brand">
+      <img src="./logo1.jpg" alt="CleanCity logo">
+      <span>CleanCity</span>
+    </div>
+    <nav class="cc-navlinks">
+      <a href="./index.html">Home</a>
+      <a href="./authority-profile.html">Authority</a>
+      <a href="./view-report.html">View Issues</a>
+      <a href="./authority-dashboard.html">Dashboard</a>
+      <a href="index.html" id="logoutBtn">Logout</a>
+    </nav>
+  </div>
+</div>
+
+<main class="cc-wrap">
+  <section class="cc-grid">
+    <!-- LEFT PANEL -->
+    <aside class="cc-card cc-user">
+      <img class="cc-avatar" src="./assets/img/authority.jpg" alt="Authority picture" id="avatar">
+      <div class="cc-name" id="displayName">Officer Name</div>
+      <div class="cc-role" id="designation">Waste Management Officer</div>
+      <hr class="cc-sep">
+      <ul class="cc-stats">
+        <li><span>Assigned Reports</span><strong id="statAssigned">0</strong></li>
+        <li><span>Resolved</span><strong id="statResolved">0</strong></li>
+        <li><span>Pending</span><strong id="statPending">0</strong></li>
+      </ul>
+      <a class="cc-btn" href="#">View Official Profile</a>
+    </aside>
+
+    <!-- RIGHT PANEL -->
+    <section class="cc-card headlined">
+      <div class="cap">Official Information</div>
+      <div class="body">
+        <form id="authorityForm" class="cc-formgrid" autocomplete="off">
+          <div class="cc-field"><label class="cc-label">Officer Name</label><input name="officerName" class="cc-input" type="text"></div>
+          <div class="cc-field"><label class="cc-label">Officer ID / Badge No.</label><input name="badge" class="cc-input" type="text"></div>
+          <div class="cc-field"><label class="cc-label">Designation</label><input name="designation" class="cc-input" type="text"></div>
+          <div class="cc-field"><label class="cc-label">Department / Unit</label><input name="department" class="cc-input" type="text"></div>
+          <div class="cc-field"><label class="cc-label">Assigned Area / Zone</label><input name="area" class="cc-input" type="text"></div>
+          <div class="cc-field"><label class="cc-label">Official Email</label><input name="email" class="cc-input" type="email"></div>
+          <div class="cc-field"><label class="cc-label">Personal Email</label><input name="personalEmail" class="cc-input" type="email"></div>
+          <div class="cc-field"><label class="cc-label">Phone</label><input name="phone" class="cc-input" type="text"></div>
+          <div class="cc-field"><label class="cc-label">Office Address</label><input name="address" class="cc-input" type="text"></div>
+          <div class="cc-field"><label class="cc-label">Emergency Contact</label><input name="emergency" class="cc-input" type="text"></div>
+          <div class="cc-actions"><button type="submit" class="cc-primary">Update</button></div>
+        </form>
+      </div>
+    </section>
+  </section>
+
+  <section class="cc-bottom">
+    <div class="cc-card">
+      <h4>Recent Activities</h4>
+      <ul id="activityList" class="cc-activities"></ul>
+    </div>
+
+    <div class="cc-card">
+      <h4>Reports Overview</h4>
+      <p>Manage community waste reports assigned to your area/unit.</p>
+      <button class="cc-chipbtn" id="btnReports">Manage Reports</button>
+    </div>
+
+    <div class="cc-card">
+      <h4>Account Settings</h4>
+      <p>Change password, login preferences, or remove account.</p>
+      <button class="cc-chipbtn" id="btnManage">Manage Account</button>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footwrap">
+    <div>
+      <h4>About CleanCity</h4>
+      <p>Municipal authority platform to monitor and resolve waste issues.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+          <li><a href="./index.html">Home</a></li>
+          <li><a href="./public-feed.html">public-feed</a></li>
+          <li><a href="./map.html">Map</a></li>
+        </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li>Email: support@cleancity.org</li>
+        <li>Phone: +880-123-456-789</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const LS_AUTHORITY="authorityProfile";
+  const LS_ACTIVITY="authorityActivity";
+  const form=document.getElementById("authorityForm");
+  const displayName=document.getElementById("displayName");
+  const designationEl=document.getElementById("designation");
+  const activityList=document.getElementById("activityList");
+
+  const user=JSON.parse(localStorage.getItem("currentUser"));
+  if(!user||user.role!=="authority") window.location.href="index.html";
+
+  // Load profile
+  function loadProfile(){
+    const data=JSON.parse(localStorage.getItem(LS_AUTHORITY))||{};
+    form.officerName.value=data.officerName||"";
+    form.badge.value=data.badge||"";
+    form.designation.value=data.designation||"";
+    form.department.value=data.department||"";
+    form.area.value=data.area||"";
+    form.email.value=data.email||"";
+    form.personalEmail.value=data.personalEmail||"";
+    form.phone.value=data.phone||"";
+    form.address.value=data.address||"";
+    form.emergency.value=data.emergency||"";
+    displayName.textContent=form.officerName.value||"Officer Name";
+    designationEl.textContent=form.designation.value||"Designation";
+  }
+
+  function saveProfile(){
+    const data={
+      officerName:form.officerName.value.trim(),
+      badge:form.badge.value.trim(),
+      designation:form.designation.value.trim(),
+      department:form.department.value.trim(),
+      area:form.area.value.trim(),
+      email:form.email.value.trim(),
+      personalEmail:form.personalEmail.value.trim(),
+      phone:form.phone.value.trim(),
+      address:form.address.value.trim(),
+      emergency:form.emergency.value.trim()
+    };
+    localStorage.setItem(LS_AUTHORITY,JSON.stringify(data));
+    displayName.textContent=data.officerName;
+    designationEl.textContent=data.designation;
+    pushActivity("Updated authority profile");
+  }
+
+  function renderActivities(items){
+    activityList.innerHTML="";
+    items.forEach(txt=>{const li=document.createElement("li"); li.textContent="• "+txt; activityList.appendChild(li);});
+  }
+
+  function loadActivities(){
+    const defaults=["Reviewed pending waste reports.","Assigned report to cleanup team.","Updated office phone number."];
+    const acts=JSON.parse(localStorage.getItem(LS_ACTIVITY))||defaults;
+    renderActivities(acts);
+  }
+
+  function pushActivity(text){
+    const arr=JSON.parse(localStorage.getItem(LS_ACTIVITY))||[];
+    arr.unshift(`${text} (${new Date().toLocaleString()})`);
+    localStorage.setItem(LS_ACTIVITY,JSON.stringify(arr.slice(0,20)));
+    renderActivities(arr.slice(0,20));
+  }
+
+  form.addEventListener("submit",(e)=>{
+    e.preventDefault();
+    saveProfile();
+    const btn=e.submitter||form.querySelector(".cc-primary");
+    const prev=btn.textContent;
+    btn.textContent="Saved ✓";
+    setTimeout(()=>btn.textContent=prev,1200);
+  });
+
+  document.getElementById("btnReports").addEventListener("click",()=>{pushActivity("Accessed Reports");alert("Open report management interface (demo)");});
+  document.getElementById("btnManage").addEventListener("click",()=>{pushActivity("Opened Manage Account");alert("Manage account options (demo)");});
+  document.getElementById("logoutBtn").addEventListener("click",()=>{localStorage.removeItem("currentUser");});
+
+  loadProfile();
+  loadActivities();
+</script>
+</body>
+</html>

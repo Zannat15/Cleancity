@@ -1,68 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CleanCity | Home</title>
-  <link rel="stylesheet" href="style.css"/>
+  <title>CleanCity – Home</title>
+  <link rel="stylesheet" href="./style.css"/>
 </head>
 <body>
+<!-- Header -->
+<header class="navbar">
+  <div class="brand">
+    <div class="brand-badge">
+      <img src="./logo1.jpg" alt="CleanCity Logo" class="logo">
+    </div>
+    <div class="brand-title">CleanCity Dashboard</div>
+  </div>
 
-  <!-- Sidebar -->
-  <aside class="sidebar">
-    <img src="./logo3.jpg" alt="CleanCity Logo" class="logo" />
-    <nav>
-      <ul>
-       <li><a href="index.html"class="active">Home</a></li>
-        <li><a href="login.html">Login</a></li>
-        <li><a href="register.html">Register</a></li>
-        <li><a href="profile.html">Profile</a></li>
-        <li><a href="report.html">Report</a></li>
-        <li><a href="view-issues.html">Issues</a></li>
-        <li><a href="history.html">History</a></li>
-        <li><a href="./edit-report.html">Edit Report</a></li>
-        <li><a href="./public-feed.html">Public Feed</a></li>
-         <li><a href="dashboard.html">Dashboard</a></li>
-      </ul>
-    </nav>
-  </aside>
+  <nav class="nav">
+    <a href="#features">Features</a>
+    <a href="#events">Events</a>
+    <a href="#how">How it Works</a>
+    <a href="#contact">Contact</a>
+    <button class="btn btn--ghost" data-open="loginModal">Login</button>
+    <button class="btn btn--solid" data-open="registerModal">Register</button>
+  </nav>
+</header>
 
-  <!-- Main Content -->
-  <main class="content">
-    <!-- Header -->
-    <header class="topbar">
-      <h1>CleanCity</h1>
-      <span class="page-title">Home</span>
-    </header>
 
-    <!-- Cover Image with Welcome Text -->
-<div class="cover-image cover-index">
-  <div class="cover-text">
-    <h2>Welcome to CleanCity</h2>
-    <p>Empowering communities to report and resolve waste issues across Bangladesh.</p>
+
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero__content">
+      <h1>Welcome to CleanCity</h1>
+      <p>Together for a cleaner tomorrow</p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features" class="section">
+    <h2 class="section__title">Our Features</h2>
+    <div class="grid">
+      <article class="card">
+        <img src="./2.jpg" alt="Report Waste"/>
+        <h3>Report Waste Issues</h3>
+        <p>Submit issues with photos, categories, and exact locations.</p>
+      </article>
+      <article class="card">
+        <img src="./tracking.jpg" alt="Track Progress"/>
+        <h3>Track Progress</h3>
+        <p>Status updates: Pending → In Process → Done.</p>
+      </article>
+      <article class="card">
+        <img src="./6.jpg" alt="Dashboard"/>
+        <h3>Community Dashboard</h3>
+        <p>Charts and analytics to visualize cleanliness trends.</p>
+      </article>
+      <article class="card">
+        <img src="./map.jpg" alt="Map Integration"/>
+        <h3>Map Integration</h3>
+        <p>See municipal trash centers and issue pins on a live map.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Events -->
+  <section id="events" class="section">
+    <h2 class="section__title">Upcoming Events</h2>
+    <div class="grid grid--2">
+      <article class="card">
+        <img src="./clenup.jpg" alt="Cleanup Drive"/>
+        <h3>City Cleanup Drive</h3>
+        <p>Join the community cleanup this month and make an impact.</p>
+      </article>
+      <article class="card">
+        <img src="./tree.jpg" alt="Tree Plantation"/>
+        <h3>Tree Plantation</h3>
+        <p>Plant trees with us to keep the city cool and green.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- How it Works -->
+  <section id="how" class="section">
+    <h2 class="section__title">How It Works</h2>
+    <div class="grid">
+      <article class="card card--simple">
+        <h3>1. Register</h3>
+        <p>Create an account as Citizen or Authority.</p>
+      </article>
+      <article class="card card--simple">
+        <h3>2. Report</h3>
+        <p>Submit waste issues with details and location.</p>
+      </article>
+      <article class="card card--simple">
+        <h3>3. Resolve</h3>
+        <p>Authority updates status while teams resolve.</p>
+      </article>
+      <article class="card card--simple">
+        <h3>4. Track</h3>
+        <p>Follow your contributions and citywide progress.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="contact" class="footer">
+    <div>
+      <h4>Quick Links</h4>
+      <a href="#features">Features</a>
+      <a href="#events">Events</a>
+      <a href="#how">How it Works</a>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <a href="#">Waste Reporting</a>
+      <a href="#">Analytics</a>
+      <a href="#">Cleanup Campaigns</a>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <p>Email: info@cleancity.org</p>
+      <p>Phone: +880 1234 567890</p>
+      <p>Address: Green Road, Dhaka</p>
+    </div>
+  </footer>
+
+<!-- LOGIN MODAL -->
+<div class="modal" id="loginModal" aria-hidden="true">
+  <div class="modal__backdrop" data-close="loginModal"></div>
+  <div class="modal__card">
+    <button class="modal__close" data-close="loginModal">&times;</button>
+    <h2 class="auth-title">Login</h2>
+
+    <form id="loginForm" class="auth-form">
+      <!-- Role selection -->
+      <div class="role-toggle">
+        <button type="button" class="role-toggle__btn" data-role="citizen">Citizen</button>
+        <button type="button" class="role-toggle__btn" data-role="authority">Authority</button>
+        <input type="hidden" id="loginRole" name="role" value="">
+      </div>
+
+      <input type="email" id="loginEmail" placeholder="Email" required>
+      <input type="password" id="loginPass" placeholder="Password" required>
+
+      <div class="auth-row">
+        <a href="#" class="auth-link">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="btn-auth">Login</button>
+
+      <div class="divider">OR</div>
+
+      
+
+      <div class="auth-switch">
+        Don't have an account? <a href="#" data-switch="registerModal" data-current="loginModal">Sign Up</a>
+      </div>
+    </form>
   </div>
 </div>
 
+<!-- REGISTER MODAL -->
+<div class="modal" id="registerModal" aria-hidden="true">
+  <div class="modal__backdrop" data-close="registerModal"></div>
+  <div class="modal__card">
+    <button class="modal__close" data-close="registerModal">&times;</button>
+    <h2 class="auth-title">Sign Up</h2>
 
-    <!-- Mission (Styled Card) -->
-    <section class="mission-card">
-      <h3>Our Mission</h3>
-      <p>To create cleaner and greener urban spaces through collaborative waste reporting and smart analytics.</p>
-    </section>
+    <form id="registerForm" class="auth-form">
+      <!-- Role selection -->
+      <div class="role-toggle">
+        <button type="button" class="role-toggle__btn" data-role="citizen">Citizen</button>
+        <button type="button" class="role-toggle__btn" data-role="authority">Authority</button>
+        <input type="hidden" id="registerRole" name="role" value="">
+      </div>
 
-    <!-- Feature Cards -->
-    <section class="features">
-      <div class="card">Easy Waste Reporting</div>
-      <div class="card">Real-time Tracking</div>
-      <div class="card">Data-driven Decisions</div>
-      <div class="card">Responsive Design</div>
-      <div class="card">Citizen Engagement</div>
-      <div class="card">Analytics Dashboard</div>
-    </section>
-  </main>
-  
+      <input type="text" id="regName" placeholder="Full Name" required>
+      <input type="email" id="regEmail" placeholder="Email" required>
+      <input type="password" id="regPass" placeholder="Password" required>
+      <input type="password" id="regPass2" placeholder="Confirm Password" required>
 
+      <button type="submit" class="btn-auth">Sign Up</button>
+
+      <div class="divider">OR</div>
+
+      <div class="auth-switch">
+        Already have an account? <a href="#" data-switch="loginModal" data-current="registerModal">Login</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+  <script src="./script.js"></script>
 </body>
 </html>
-
-

@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CleanCity • Authority Dashboard</title>
+
+  <!-- Chart.js (lightweight CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <style>
+    :root{
+      --bg:#0b0c10;
+      --page:#f5f7fb;
+      --card:#0f1115;          /* black cards */
+      --muted:#8a93a6;
+      --text:#111827;
+      --white:#fff;
+      --brand:#2dd4bf;         /* teal accent */
+      --brand-2:#6366f1;       /* indigo accent */
+      --danger:#ef4444;
+      --warning:#f59e0b;
+      --success:#10b981;
+      --shadow:0 8px 30px rgba(17,24,39,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background:var(--page);
+      font: 15px/1.45 "Inter", system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      color:var(--text);
+    }
+
+    /* ───── Navbar ───── */
+    .nav{
+      position:sticky; top:0; z-index:50;
+      background:#0e1330;
+      color:var(--white);
+      padding:10px 18px;
+      box-shadow:0 8px 24px rgba(0,0,0,.15);
+      display:flex; align-items:center; gap:14px;
+    }
+    .logo{
+      width:38px;height:38px;border-radius:10px;display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      box-shadow:inset 0 0 0 2px rgba(255,255,255,.15);
+      font-weight:800; letter-spacing:.5px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px;margin-right:auto;
+    }
+    .brand h1{font-size:18px;margin:0;font-weight:700}
+    .nav .search{
+      display:flex;align-items:center;gap:8px;background:#1c2147;border-radius:12px;padding:8px 12px;min-width:260px;
+    }
+    .nav input{
+      background:transparent;border:0;color:#cdd3ff;outline:none;width:100%;
+    }
+    .nav .btn{
+      border:0;border-radius:12px;padding:10px 14px;background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      color:#fff;font-weight:600;cursor:pointer;
+    }
+
+    /* ───── Layout ───── */
+    .container{max-width:1300px;margin:22px auto;padding:0 16px}
+    .grid{display:grid;gap:18px}
+    .grid.cards{grid-template-columns:repeat(5,minmax(180px,1fr))}
+    @media (max-width:1200px){.grid.cards{grid-template-columns:repeat(3,1fr)}}
+    @media (max-width:800px){.grid.cards{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:520px){.grid.cards{grid-template-columns:1fr}}
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      color:#e6e7ee;
+      padding:18px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .card .label{color:#9aa3b2;font-size:12px;text-transform:uppercase;letter-spacing:.08em}
+    .card .value{font-size:28px;font-weight:800;margin:6px 0 4px}
+    .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700}
+    .up{background:rgba(16,185,129,.15);color:#34d399}
+    .down{background:rgba(239,68,68,.15);color:#f87171}
+
+    /* ───── Controls ───── */
+    .toolbar{
+      display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:10px 0 2px;
+    }
+    .toolbar .control{
+      background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:10px 12px;display:flex;gap:8px;align-items:center;
+      box-shadow:var(--shadow);
+    }
+    .toolbar select,.toolbar input{border:0;background:transparent;outline:none;color:#111827}
+    .toolbar .btn{background:var(--brand);color:#07221f;border:0;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer}
+    .toolbar .btn.alt{background:#111827;color:#fff}
+
+    /* ───── Panels ───── */
+    .panel{
+      background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;
+    }
+    .panel h3{margin:0 0 14px;font-size:16px}
+    .flex-2{display:grid;grid-template-columns:2fr 1fr;gap:18px}
+    @media (max-width:1000px){.flex-2{grid-template-columns:1fr}}
+    .charts{display:grid;grid-template-columns:2fr 1.2fr 1.2fr;gap:18px}
+    @media (max-width:1200px){.charts{grid-template-columns:1fr 1fr}}
+    @media (max-width:780px){.charts{grid-template-columns:1fr}}
+
+    /* ───── Tables ───── */
+    table{width:100%;border-collapse:separate;border-spacing:0 10px}
+    th{font-size:12px;color:#6b7280;text-transform:uppercase;letter-spacing:.06em;text-align:left;padding:8px}
+    td{background:#f9fafb;padding:12px 10px;border-top-left-radius:10px;border-bottom-left-radius:10px;border-top-right-radius:10px;border-bottom-right-radius:10px}
+    tr td.status{font-weight:700}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;font-size:12px}
+    .pill.pending{background:rgba(245,158,11,.12);color:#b45309}
+    .pill.open{background:rgba(59,130,246,.12);color:#1d4ed8}
+    .pill.resolved{background:rgba(16,185,129,.12);color:#047857}
+    .actions a{margin-right:10px;text-decoration:none;font-weight:700}
+    .actions a.assign{color:#2563eb}
+    .actions a.reassign{color:#9333ea}
+
+    /* ───── Heat map (simple grid) ───── */
+    .heat{
+      display:grid;grid-template-columns:repeat(8,1fr);gap:6px;
+    }
+    .cell{
+      aspect-ratio:1/1;border-radius:6px;background:#e5e7eb;position:relative;
+    }
+    .cell[data-level="1"]{background:#d1fae5}
+    .cell[data-level="2"]{background:#a7f3d0}
+    .cell[data-level="3"]{background:#6ee7b7}
+    .cell[data-level="4"]{background:#34d399}
+    .cell[data-level="5"]{background:#10b981}
+    .cell small{
+      position:absolute;inset:auto 6px 6px auto;font-size:10px;color:#065f46;font-weight:700
+    }
+
+    /* ───── Right rail (notifications/admin) ───── */
+    .rail{display:grid;gap:18px}
+    .notif{display:grid;gap:10px}
+    .note{display:flex;gap:10px;align-items:flex-start;padding:10px;border-radius:12px;background:#f3f4f6}
+    .note .dot{width:10px;height:10px;border-radius:50%}
+    .dot.new{background:var(--brand-2)} .dot.warn{background:var(--warning)} .dot.urgent{background:var(--danger)}
+
+    .admin-actions{display:grid;gap:10px}
+    .admin-actions .btn{
+      padding:12px;border-radius:12px;border:1px dashed #d1d5db;background:#fff;cursor:pointer;font-weight:700;text-align:left
+    }
+    .admin-actions .btn:hover{border-style:solid}
+
+    /* Footer */
+    .footer{color:#6b7280;font-size:13px;text-align:center;margin:26px 0 40px}
+  </style>
+</head>
+<body>
+
+  <!-- Top Navbar -->
+  <header class="nav">
+    <div class="brand">
+      <!-- Inline “logo picture” (kept in-file) -->
+      <div class="logo" aria-hidden="true">CC</div>
+      <h1>CleanCity • Authority Dashboard</h1>
+    </div>
+
+    <div class="search" role="search">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 21l-4.2-4.2M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="#cdd3ff" stroke-width="2" stroke-linecap="round"/></svg>
+      <input placeholder="Search reports, officers, areas…" />
+    </div>
+
+    <button class="btn" onclick="resetFilters()">Reset Filters</button>
+  </header>
+
+  <main class="container">
+    <!-- 5 Black Summary Cards -->
+    <section class="grid cards">
+      <article class="card">
+        <div class="label">Total Issues Reported</div>
+        <div class="value" id="k_total">—</div>
+        <span class="chip up" id="k_total_delta">+0% vs last wk</span>
+      </article>
+      <article class="card">
+        <div class="label">Pending Issues</div>
+        <div class="value" id="k_pending">—</div>
+        <span class="chip down" id="k_pending_delta">-0% this wk</span>
+      </article>
+      <article class="card">
+        <div class="label">Resolved Issues</div>
+        <div class="value" id="k_resolved">—</div>
+        <span class="chip up" id="k_resolved_delta">+0% this wk</span>
+      </article>
+      <article class="card">
+        <div class="label">Active Officers on Duty</div>
+        <div class="value" id="k_officers">—</div>
+        <span class="chip up" id="k_officers_delta">+0 today</span>
+      </article>
+      <article class="card">
+        <div class="label">Overall Cleanliness Score</div>
+        <div class="value" id="k_score">—</div>
+        <span class="chip up">Target ≥ 80</span>
+      </article>
+    </section>
+
+    <!-- Filters & Controls -->
+    <section class="toolbar">
+      <div class="control">
+        <strong>Status:</strong>
+        <select id="f_status">
+          <option value="all">All</option>
+          <option value="Pending">Pending</option>
+          <option value="In-progress">In-progress</option>
+          <option value="Resolved">Resolved</option>
+        </select>
+      </div>
+      <div class="control">
+        <strong>Area:</strong>
+        <select id="f_area">
+          <option value="all">All Areas</option>
+          <option>Gulshan</option>
+          <option>Dhanmondi</option>
+          <option>Banani</option>
+          <option>Mirpur</option>
+          <option>Uttara</option>
+        </select>
+      </div>
+      <div class="control">
+        <strong>Date:</strong>
+        <input id="f_from" type="date"> –
+        <input id="f_to" type="date">
+      </div>
+      <button class="btn alt" onclick="applyFilters()">Apply</button>
+      <button class="btn" onclick="exportTables()">Export Data (CSV)</button>
+    </section>
+
+    <!-- Charts + Right rail -->
+    <section class="flex-2">
+      <div class="grid charts">
+        <div class="panel">
+          <h3>Issues Trend (Reported vs Resolved)</h3>
+          <canvas id="lineChart" height="140"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Issues by Type</h3>
+          <canvas id="pieChart" height="140"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Issues per Area / Zone</h3>
+          <canvas id="barChart" height="140"></canvas>
+        </div>
+        <div class="panel">
+          <h3>Hotspots Heat Map (last 30 days)</h3>
+          <div id="heat" class="heat"></div>
+        </div>
+      </div>
+
+      <aside class="rail">
+        <div class="panel">
+          <h3>Notifications & Alerts</h3>
+          <div class="notif" id="notifList"></div>
+        </div>
+        <div class="panel">
+          <h3>Administrative Tools</h3>
+          <div class="admin-actions">
+            <button class="btn" style="width:100%" onclick="bulkAssign()">Assign / Reassign Issues</button>
+            <button class="btn" style="width:100%;background:#111827;color:#fff;border:1px solid #111827" onclick="addOfficer()">Add / Edit Officers</button>
+            <button class="btn" style="width:100%" onclick="generateReport()">Generate PDF/Excel Report</button>
+            <button class="btn" style="width:100%" onclick="viewFeedback()">View Citizen Feedback</button>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Data Tables -->
+    <section class="grid" style="grid-template-columns:2fr 1.2fr;gap:18px;margin-top:18px">
+      <div class="panel">
+        <h3>Recent Reports</h3>
+        <table id="tblReports">
+          <thead>
+            <tr>
+              <th>ID</th><th>Type</th><th>Area</th><th>Date</th><th>Status</th><th>Priority</th><th>Assigned</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h3>Officer Performance</h3>
+        <table id="tblOfficers">
+          <thead>
+            <tr>
+              <th>Officer</th><th>Area</th><th>Resolved</th><th>Pending</th><th>On Duty</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <p class="footer">© CleanCity Authority • Frontend demo dashboard</p>
+  </main>
+
+  <script>
+    /* ---------------- Mock Data ---------------- */
+    const TYPES = ["Garbage","Illegal Dumping","Blocked Drain","Construction Waste","Other"];
+    const AREAS = ["Gulshan","Dhanmondi","Banani","Mirpur","Uttara"];
+    const STATUS = ["Pending","In-progress","Resolved"];
+    const PRIORITY = ["Low","Medium","High","Urgent"];
+
+    // Generate 80 mock reports across the last 90 days
+    const reports = Array.from({length:80}, (_,i)=>{
+      const dayOffset = Math.floor(Math.random()*90);
+      const date = new Date(Date.now()-dayOffset*86400000);
+      return {
+        id: 5000+i,
+        type: TYPES[Math.floor(Math.random()*TYPES.length)],
+        area: AREAS[Math.floor(Math.random()*AREAS.length)],
+        date: date.toISOString().slice(0,10),
+        status: STATUS[Math.floor(Math.random()*STATUS.length)],
+        priority: PRIORITY[Math.floor(Math.random()*PRIORITY.length)],
+        assigned: ["A. Rahman","S. Akter","M. Hossain","T. Khan","—"][Math.floor(Math.random()*5)]
+      }
+    }).sort((a,b)=>b.date.localeCompare(a.date));
+
+    const officers = [
+      {name:"A. Rahman", area:"Gulshan", resolved:32, pending:4, onDuty:true},
+      {name:"S. Akter", area:"Dhanmondi", resolved:28, pending:7, onDuty:true},
+      {name:"M. Hossain", area:"Banani", resolved:19, pending:6, onDuty:false},
+      {name:"T. Khan", area:"Mirpur", resolved:24, pending:11, onDuty:true},
+      {name:"N. Chowdhury", area:"Uttara", resolved:17, pending:3, onDuty:false},
+    ];
+
+    const notifications = [
+      {type:"new", text:"3 new citizen reports in Mirpur."},
+      {type:"warn", text:"5 cases overdue in Dhanmondi (over 72h)."},
+      {type:"urgent", text:"Hazardous waste reported in Gulshan-2."},
+      {type:"new", text:"Officer schedule updated for tonight."},
+    ];
+
+    /* ---------------- Helpers ---------------- */
+    function $(sel, el=document){return el.querySelector(sel)}
+    function $$(sel, el=document){return [...el.querySelectorAll(sel)]}
+
+    function within(date, from, to){
+      const d = new Date(date).setHours(0,0,0,0);
+      if(from && d < new Date(from).setHours(0,0,0,0)) return false;
+      if(to && d > new Date(to).setHours(0,0,0,0)) return false;
+      return true;
+    }
+
+    /* ---------------- Populate Tables ---------------- */
+    const tbodyReports = $("#tblReports tbody");
+    const tbodyOfficers = $("#tblOfficers tbody");
+
+    function renderReports(list){
+      tbodyReports.innerHTML = "";
+      list.slice(0,18).forEach(r=>{
+        const tr = document.createElement("tr");
+        const pillClass =
+          r.status==="Resolved" ? "resolved" :
+          r.status==="Pending" ? "pending" : "open";
+        tr.innerHTML = `
+          <td>#${r.id}</td>
+          <td>${r.type}</td>
+          <td>${r.area}</td>
+          <td>${r.date}</td>
+          <td class="status"><span class="pill ${pillClass}">${r.status}</span></td>
+          <td>${r.priority}</td>
+          <td>${r.assigned}</td>
+          <td class="actions">
+            <a href="#" class="assign" onclick="assign(${r.id});return false;">Assign</a>
+            <a href="#" class="reassign" onclick="reassign(${r.id});return false;">Reassign</a>
+          </td>`;
+        tbodyReports.appendChild(tr);
+      });
+    }
+
+    function renderOfficers(rows){
+      tbodyOfficers.innerHTML = "";
+      rows.forEach(o=>{
+        const on = o.onDuty ? "Yes" : "No";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td>${o.name}</td><td>${o.area}</td><td>${o.resolved}</td><td>${o.pending}</td><td>${on}</td>`;
+        tbodyOfficers.appendChild(tr);
+      });
+    }
+
+    /* ---------------- Notifications ---------------- */
+    function renderNotifications(){
+      const box = $("#notifList");
+      box.innerHTML = "";
+      notifications.forEach(n=>{
+        const div = document.createElement("div");
+        div.className = "note";
+        const color = n.type==="urgent"?"urgent": n.type==="warn"?"warn":"new";
+        div.innerHTML = `<span class="dot ${color}"></span><div>${n.text}</div>`;
+        box.appendChild(div);
+      });
+    }
+
+    /* ---------------- Heat Map ---------------- */
+    function renderHeat(){
+      const heat = $("#heat");
+      heat.innerHTML = "";
+      for(let i=0;i<32;i++){
+        const level = 1 + Math.floor(Math.random()*5);
+        const cell = document.createElement("div");
+        cell.className = "cell";
+        cell.dataset.level = level;
+        if(Math.random()<.18){ cell.innerHTML = `<small>${level}</small>`; }
+        heat.appendChild(cell);
+      }
+    }
+
+    /* ---------------- KPI Cards ---------------- */
+    function updateKPIs(filtered){
+      const total = filtered.length;
+      const pending = filtered.filter(r=>r.status==="Pending").length;
+      const resolved = filtered.filter(r=>r.status==="Resolved").length;
+
+      // officers on duty
+      const active = officers.filter(o=>o.onDuty).length;
+
+      // cleanliness score (toy model)
+      const cleanliness = Math.round(60 + (resolved/Math.max(total,1))*40);
+
+      $("#k_total").textContent = total;
+      $("#k_pending").textContent = pending;
+      $("#k_resolved").textContent = resolved;
+      $("#k_officers").textContent = active;
+      $("#k_score").textContent = cleanliness + "/100";
+    }
+
+    /* ---------------- Charts ---------------- */
+    let lineChart, pieChart, barChart;
+
+    function buildCharts(filtered){
+      const ctxL = $("#lineChart"), ctxP = $("#pieChart"), ctxB = $("#barChart");
+
+      // Trend by week
+      const weeks = Array.from({length:12}, (_,i)=>i).map(i=>{
+        const start = new Date(); start.setDate(start.getDate()-7*(11-i));
+        const end = new Date(start); end.setDate(start.getDate()+6);
+        const label = `${start.toLocaleDateString(undefined,{month:"short",day:"numeric"})}`;
+        const reported = filtered.filter(r=>within(r.date, start, end)).length;
+        const resolved = filtered.filter(r=>r.status==="Resolved" && within(r.date,start,end)).length;
+        return {label, reported, resolved};
+      });
+
+      const typeCounts = TYPES.map(t=>filtered.filter(r=>r.type===t).length);
+      const areaCounts = AREAS.map(a=>filtered.filter(r=>r.area===a).length);
+
+      // Destroy previous
+      [lineChart,pieChart,barChart].forEach(c=>c && c.destroy());
+
+      lineChart = new Chart(ctxL, {
+        type:"line",
+        data:{
+          labels:weeks.map(w=>w.label),
+          datasets:[
+            {label:"Reported", data:weeks.map(w=>w.reported), tension:.35, fill:false},
+            {label:"Resolved", data:weeks.map(w=>w.resolved), tension:.35, fill:false}
+          ]
+        },
+        options:{
+          responsive:true,
+          plugins:{legend:{position:"bottom"}},
+          scales:{y:{beginAtZero:true, ticks:{precision:0}}}
+        }
+      });
+
+      pieChart = new Chart(ctxP, {
+        type:"pie",
+        data:{labels:TYPES, datasets:[{data:typeCounts}]},
+        options:{plugins:{legend:{position:"bottom"}}}
+      });
+
+      barChart = new Chart(ctxB, {
+        type:"bar",
+        data:{labels:AREAS, datasets:[{label:"Issues", data:areaCounts}]},
+        options:{
+          plugins:{legend:{display:false}},
+          scales:{y:{beginAtZero:true, ticks:{precision:0}}}
+        }
+      });
+    }
+
+    /* ---------------- Filters ---------------- */
+    function getFilters(){
+      return {
+        status: $("#f_status").value,
+        area: $("#f_area").value,
+        from: $("#f_from").value || null,
+        to: $("#f_to").value || null
+      }
+    }
+
+    function applyFilters(){
+      const f = getFilters();
+      const filtered = reports.filter(r=>{
+        const okS = (f.status==="all" || r.status===f.status);
+        const okA = (f.area==="all" || r.area===f.area);
+        const okD = within(r.date, f.from, f.to);
+        return okS && okA && okD;
+      });
+
+      renderReports(filtered);
+      updateKPIs(filtered);
+      buildCharts(filtered);
+      renderHeat();
+    }
+
+    function resetFilters(){
+      $("#f_status").value = "all";
+      $("#f_area").value = "all";
+      $("#f_from").value = "";
+      $("#f_to").value = "";
+      applyFilters();
+    }
+
+    /* ---------------- Admin Handlers (demo) ---------------- */
+    function assign(id){ alert(`Assign issue #${id} to an officer.`); }
+    function reassign(id){ alert(`Reassign issue #${id}.`); }
+    function bulkAssign(){ alert("Open bulk assign dialog (demo)."); }
+    function addOfficer(){ alert("Open Add/Edit officer modal (demo)."); }
+    function viewFeedback(){ alert("Open citizen feedback stream (demo)."); }
+    function generateReport(){ alert("Generate PDF/Excel (demo). Use Export Data for CSV now."); }
+
+    /* ---------------- Export CSV ---------------- */
+    function tableToCSV(table){
+      const rows = [...table.querySelectorAll("tr")].map(tr=>[...tr.children].map(td=>`"${td.innerText.replace(/"/g,'""')}"`).join(","));
+      return rows.join("\n");
+    }
+    function download(name, content){
+      const blob = new Blob([content],{type:"text/csv;charset=utf-8;"});
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = name;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    }
+    function exportTables(){
+      download("cleancity_reports.csv", tableToCSV($("#tblReports")));
+      download("cleancity_officers.csv", tableToCSV($("#tblOfficers")));
+    }
+
+    /* ---------------- Boot ---------------- */
+    function boot(){
+      renderReports(reports);
+      renderOfficers(officers);
+      renderNotifications();
+      renderHeat();
+      updateKPIs(reports);
+      buildCharts(reports);
+    }
+    boot();
+  </script>
+</body>
+</html>

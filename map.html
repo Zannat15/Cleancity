@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanCity - Trash Centers Map</title>
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #E3C39D;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: #1d1661;
+      color: white;
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .navbar .logo {
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+    }
+    .navbar ul li {
+      display: inline;
+    }
+    .navbar ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 15px;
+    }
+
+    /* Map Section */
+    #map {
+      height: 500px;
+      width: 100%;
+    }
+
+    /* Office Cards */
+    .offices {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .card h3 {
+      margin: 0 0 10px;
+      color: #064635;
+    }
+    .card p {
+      margin: 5px 0;
+      font-size: 14px;
+    }
+
+    /* Footer */
+    .footer {
+      background: #1c205b;
+      color: white;
+      padding: 20px;
+      margin-top: auto;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">CleanCity</div>
+    <ul>
+      <li><a href="./index.html">Home</a></li>
+      <li><a href="./public-feed.html">PublicFeed</a></li>
+      <li><a href="./logout.html">Logout</a></li>
+      
+    </ul>
+  </nav>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <!-- Office Cards -->
+  <section class="offices">
+    <div class="card">
+      <h3>Dhaka City Trash Center</h3>
+      <p><strong>Address:</strong> Gabtoli, Dhaka</p>
+      <p><strong>Phone:</strong> +880 123 456 789</p>
+    </div>
+    <div class="card">
+      <h3>Chattogram City Trash Center</h3>
+      <p><strong>Address:</strong> Agrabad, Chattogram</p>
+      <p><strong>Phone:</strong> +880 987 654 321</p>
+    </div>
+    <div class="card">
+      <h3>Khulna City Trash Center</h3>
+      <p><strong>Address:</strong> Khalishpur, Khulna</p>
+      <p><strong>Phone:</strong> +880 456 789 123</p>
+    </div>
+    <div class="card">
+      <h3>Sylhet City Trash Center</h3>
+      <p><strong>Address:</strong> Zindabazar, Sylhet</p>
+      <p><strong>Phone:</strong> +880 321 654 987</p>
+    </div>
+    <div class="card">
+      <h3>Rajshahi City Trash Center</h3>
+      <p><strong>Address:</strong> Shaheb Bazar, Rajshahi</p>
+      <p><strong>Phone:</strong> +880 654 321 789</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2025 CleanCity. All Rights Reserved.</p>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // Initialize map centered on Bangladesh
+    var map = L.map('map').setView([23.6850, 90.3563], 7);
+
+    // Tile layer (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Trash Centers Data
+    var centers = [
+      { name: "Dhaka City Trash Center", coords: [23.8103, 90.4125] },
+      { name: "Chattogram City Trash Center", coords: [22.3569, 91.7832] },
+      { name: "Khulna City Trash Center", coords: [22.8456, 89.5403] },
+      { name: "Sylhet City Trash Center", coords: [24.8949, 91.8687] },
+      { name: "Rajshahi City Trash Center", coords: [24.3745, 88.6042] }
+    ];
+
+    // Add Markers
+    centers.forEach(c => {
+      L.marker(c.coords).addTo(map).bindPopup("<b>" + c.name + "</b>");
+    });
+
+    // Allow clicking to add issue pins
+    map.on('click', function(e) {
+      var lat = e.latlng.lat.toFixed(4);
+      var lng = e.latlng.lng.toFixed(4);
+      L.marker(e.latlng).addTo(map)
+        .bindPopup("📍 Issue reported here<br>Lat: " + lat + ", Lng: " + lng).openPopup();
+    });
+  </script>
+</body>
+</html>

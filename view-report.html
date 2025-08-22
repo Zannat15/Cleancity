@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanCity - View Issues</title>
+<style>
+* {margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI', sans-serif;}
+body {background:#E3C39D; display:flex; flex-direction:column; height:120vh;}
+.cc-navbar {display:flex;justify-content:space-between;align-items:center;padding:1rem 3rem;background:#0e2252;color:#fff;position:sticky;top:0;z-index:100;}
+.cc-navbar .logo img {height:40px;}
+.cc-navbar a {color:#fff;text-decoration:none;margin-left:1.5rem;font-weight:500;}
+.cc-navbar a:hover {color:#90ee90;}
+.cc-header {height: 100vh; ; background:url("./report2.jpg") no-repeat center center/cover;}
+.cc-content {max-width:1200px; margin:-50px auto 2rem; padding:0 2rem; width:100%; z-index:10; position:relative;}
+.cc-card {background:#ffffff84;border-radius:12px;padding:2rem;margin-bottom:2rem; box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+.cc-card__title {font-size:1.3rem;font-weight:600;margin-bottom:1.2rem;color:#222;}
+table {width:100%; border-collapse:collapse;}
+th, td {padding:0.8rem; border:1px solid #ddd; text-align:left; vertical-align:middle;}
+th {background:#006400; color:#fff;}
+td img {max-width:100px; max-height:80px; object-fit:cover; border-radius:4px;}
+.status-pending {color:orange; font-weight:600;}
+.status-inprocess {color:blue; font-weight:600;}
+.status-done {color:green; font-weight:600;}
+.status-select {padding:.3rem; border-radius:4px; border:1px solid #ccc;}
+footer { background:#000842;color:#fff;padding:2rem;margin-top:auto; }
+.footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr; gap:2rem; }
+footer h4 {margin-bottom:.8rem;}
+footer ul {list-style:none;}
+footer ul li {margin-bottom:.4rem;}
+footer ul li a {color:#fff;text-decoration:none;}
+footer ul li a:hover {text-decoration:underline;}
+</style>
+</head>
+<body>
+
+<header class="cc-navbar">
+  <div class="logo"><img src="./logo1.jpg" alt="CleanCity Logo"></div>
+  <nav>
+    <a href="./authority-profile.html">Profile</a>
+    <a href="./view-report.html">View Issues</a>
+    <a href="./authority-dashboard.html">Dashboard</a>
+    <a href="./public-feed.html">PublicFeed</a>
+    <a href="./map.html">Map</a>
+    <a href="./logout.html">Logout</a>
+
+  </nav>
+</header>
+
+<section class="cc-header"></section>
+
+
+<main class="cc-content">
+  <section class="cc-card">
+    <div class="cc-card__title">All Reported Issues</div>
+    <table id="issueTable">
+      <thead>
+        <tr>
+          <th>Reporter</th>
+          <th>Type</th>
+          <th>District</th>
+          <th>Map</th>
+          <th>Photo</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="6" style="text-align:center;">No reports yet.</td></tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-grid">
+    <div>
+      <h4>About CleanCity</h4>
+      <p>CleanCity is a citizen-powered platform to report, track, and resolve waste issues across the community.</p>
+    </div>
+    <div>
+      <h4>Quick Links</h4>
+      <ul>
+          <li><a href="./home.jpg">Home</a></li>
+          <li><a href="./public-feed.html">public-feed</a></li>
+          <li><a href="./map.html">Map</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li>Email: support@cleancity.org</li>
+        <li>Phone: +880-123-456-789</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Load reports from localStorage
+let reports = JSON.parse(localStorage.getItem("reports")) || [];
+const issueTableBody = document.querySelector("#issueTable tbody");
+
+function renderTable(){
+  if(reports.length===0){
+    issueTableBody.innerHTML='<tr><td colspan="6" style="text-align:center;">No reports yet.</td></tr>';
+    return;
+  }
+
+  issueTableBody.innerHTML = reports.map((r,index)=>`
+    <tr>
+      <td>${r.citizen}</td>
+      <td>${r.type}</td>
+      <td>${r.location}</td>
+      <td>${r.map}</td>
+      <td>${r.photo ? `<img src="${r.photo}" alt="Report Photo">` : 'No Photo'}</td>
+      <td>
+        <select class="status-select" onchange="updateStatus(${index}, this.value)">
+          <option value="Pending" ${r.status==="Pending"?'selected':''}>Pending</option>
+          <option value="In Process" ${r.status==="In Process"?'selected':''}>In Process</option>
+          <option value="Done" ${r.status==="Done"?'selected':''}>Done</option>
+        </select>
+      </td>
+    </tr>
+  `).join('');
+}
+
+function updateStatus(index, newStatus){
+  reports[index].status = newStatus;
+  localStorage.setItem("reports", JSON.stringify(reports));
+  renderTable();
+}
+
+renderTable();
+</script>
+
+</body>
+</html>
